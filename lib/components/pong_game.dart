@@ -192,17 +192,17 @@ class PongGame extends FlameGame
       return Vector2((rand.nextDouble() - 0.5) * width,
               (rand.nextDouble() * 0.4 - 0.2) * height)
           .normalized()
-        ..scale(height);
+        ..scale(width / 1.5);
     } else if (startsWithRightPlayer) {
       return Vector2((rand.nextDouble() * 0.35 + 0.15) * width,
               (rand.nextDouble() * 0.4 - 0.2) * height)
           .normalized()
-        ..scale(height);
+        ..scale(width / 1.5);
     } else {
       return Vector2((rand.nextDouble() * 0.35 - 0.5) * width,
               (rand.nextDouble() * 0.4 - 0.2) * height)
           .normalized()
-        ..scale(height);
+        ..scale(width / 1.5);
     }
   }
 

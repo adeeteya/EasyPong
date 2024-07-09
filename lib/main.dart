@@ -1,5 +1,6 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'screens/screens.dart';
+import 'package:easy_pong/screens/screens.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,8 +9,10 @@ import 'package:easy_pong/notifiers/settings_notifier.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Flame.device.fullScreen();
-  await FlameAudio.audioCache.load("ping.mp3");
+  if (!kIsWeb) {
+    await Flame.device.fullScreen();
+    await FlameAudio.audioCache.load("ping.mp3");
+  }
   final prefs = await SharedPreferences.getInstance();
   runApp(
     ProviderScope(
@@ -38,9 +41,7 @@ class EasyPongApp extends StatelessWidget {
       initialRoute: "/",
       routes: {
         "/": (context) => const HomeScreen(),
-        // "/versus_computer": (context) => const VersusComputer(),
         "/local_multiplayer": (context) => const GameApp(),
-        // "/online_multiplayer": (context) => const OnlineMultiplayer(),
         "/settings": (context) => const SettingsScreen(),
       },
     );

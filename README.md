@@ -19,7 +19,7 @@ If you like what you see, please ⭐ the repo.
 
 - 🧑‍🤝‍🧑 Ability to play Local Multiplayer (1v1)
 - 🕹️ Supported By The Keyboard as well as the Joystick
-- 🎨 Ability To Select From Multiple Different Themes (eq:- classic,football,matrix)
+- 🎨 Ability To Select From Multiple Different Themes (eq:- classic, football, matrix)
 - 🔉 Built In Sound Effects
 
 ### 🔜 Upcoming Features
@@ -40,7 +40,7 @@ If you like what you see, please ⭐ the repo.
         <img width="220" alt="Get it on Google Play" src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png">
       </a>
       <br>
-      <a href="https://github.com/adeeteya/EasyPong/releases/latest/easy_pong_android.apk">
+      <a href="https://github.com/adeeteya/EasyPong/releases/latest/download/easy_pong_android.apk">
         <img width="220" alt="APK download" src="https://user-images.githubusercontent.com/114044633/223920025-83687de0-e463-4c5d-8122-e06e4bb7d40c.png">
       </a>
     </td>
@@ -48,8 +48,15 @@ If you like what you see, please ⭐ the repo.
   <tr>
     <td>Windows</td>
     <td>
-      <a href="https://github.com/adeeteya/EasyPong/releases/latest/easy_pong_windows.exe">
+      <a href="https://github.com/adeeteya/EasyPong/releases/latest/download/easy_pong_windows.exe">
         <img width="220" alt="Windows Download" src="https://get.todoist.help/hc/article_attachments/4403191721234/WindowsButton.svg">
+      </a>
+  </tr>
+  <tr>
+    <td>Website</td>
+    <td>
+      <a href="https://adeeteya.github.io/EasyPong/">
+        Website Link
       </a>
   </tr>
   <tr>

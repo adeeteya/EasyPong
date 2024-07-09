@@ -74,8 +74,8 @@ class Ball extends PositionComponent
       velocity.x = -velocity.x;
       game.playPing();
       //Movement of ball based on where it hit the paddle
-      // velocity.y = velocity.y +
-      //     (position.y - other.position.y) / other.size.y * game.width * 0.3;
+      velocity.y = velocity.y +
+          (position.y - other.position.y) / other.size.y * game.height * 0.3;
     }
   }
 }
