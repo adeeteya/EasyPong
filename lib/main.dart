@@ -1,17 +1,30 @@
-import 'package:easy_pong/full_screen_helper.dart';
+import 'dart:io';
+
 import 'package:easy_pong/notifiers/settings_notifier.dart';
 import 'package:easy_pong/screens/screens.dart';
+import 'package:flame/flame.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:window_manager/window_manager.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initFullScreen();
   if (!kIsWeb) {
     await FlameAudio.audioCache.load('ping.mp3');
+    if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
+      await windowManager.ensureInitialized();
+      await windowManager.waitUntilReadyToShow(
+        const WindowOptions(fullScreen: true),
+        () async {
+          await windowManager.show();
+        },
+      );
+    } else {
+      await Flame.device.fullScreen();
+    }
   }
   final prefs = await SharedPreferences.getInstance();
   runApp(

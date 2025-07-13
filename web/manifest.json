@@ -2,7 +2,7 @@
     "name": "Easy Pong",
     "short_name": "Easy Pong",
     "start_url": ".",
-    "display": "standalone",
+    "display": "fullscreen",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
     "description": "Over Engineered Pong Game Made Using Flutter and Flame.",
