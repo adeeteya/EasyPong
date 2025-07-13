@@ -1,8 +1,8 @@
 import 'dart:io';
 
+import 'package:easy_pong/models/computer_difficulty.dart';
 import 'package:easy_pong/notifiers/settings_notifier.dart';
 import 'package:easy_pong/screens/screens.dart';
-import 'package:easy_pong/models/computer_difficulty.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/foundation.dart';
@@ -58,8 +58,8 @@ class EasyPongApp extends StatelessWidget {
         '/local_multiplayer': (context) => const GameApp(),
         '/computer_difficulty': (context) => const ComputerDifficultyScreen(),
         '/vs_computer': (context) {
-          final difficulty = ModalRoute.of(context)?.settings.arguments
-              as ComputerDifficulty?;
+          final difficulty =
+              ModalRoute.of(context)?.settings.arguments as ComputerDifficulty?;
           return GameApp(
             vsComputer: true,
             difficulty: difficulty ?? ComputerDifficulty.impossible,

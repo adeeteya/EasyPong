@@ -1,17 +1,14 @@
 import 'package:easy_pong/functions.dart';
 import 'package:easy_pong/themes/game_theme.dart';
-import 'package:easy_pong/models/computer_difficulty.dart';
 import 'package:flutter/material.dart';
 
 class WelcomeOverlay extends StatelessWidget {
   final GameTheme gameTheme;
   final bool isVsComputer;
-  final ComputerDifficulty difficulty;
   const WelcomeOverlay({
     super.key,
     required this.gameTheme,
     this.isVsComputer = false,
-    this.difficulty = ComputerDifficulty.impossible,
   });
 
   @override
@@ -55,7 +52,7 @@ class WelcomeOverlay extends StatelessWidget {
             child: Center(
               child: Text(
                 isVsComputer
-                    ? 'Computer Opponent (${difficulty.name})'
+                    ? 'Computer Opponent'
                     : 'Up Arrow to Move Up\nDown Arrow to Move Down',
                 style: TextStyle(color: gameTheme.leftHudTextColor),
               ),

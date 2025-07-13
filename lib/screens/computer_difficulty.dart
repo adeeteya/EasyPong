@@ -14,10 +14,7 @@ class ComputerDifficultyScreen extends StatelessWidget {
   ) async {
     await Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (context) => GameApp(
-          vsComputer: true,
-          difficulty: difficulty,
-        ),
+        builder: (context) => GameApp(vsComputer: true, difficulty: difficulty),
       ),
     );
     await Flame.device.setPortrait();
@@ -36,6 +33,7 @@ class ComputerDifficultyScreen extends StatelessWidget {
                 Text(
                   'Select Difficulty',
                   style: Theme.of(context).textTheme.displaySmall,
+                  textAlign: TextAlign.center,
                 ),
                 const Spacer(),
                 TileButton(
@@ -53,7 +51,8 @@ class ComputerDifficultyScreen extends StatelessWidget {
                 TileButton(
                   titleText: 'Impossible',
                   width: isPhone() ? 250 : 350,
-                  onTap: () => _startGame(context, ComputerDifficulty.impossible),
+                  onTap:
+                      () => _startGame(context, ComputerDifficulty.impossible),
                 ),
                 const Spacer(flex: 3),
               ],

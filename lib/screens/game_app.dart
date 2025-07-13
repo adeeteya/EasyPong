@@ -1,10 +1,10 @@
 import 'dart:io';
 
 import 'package:easy_pong/components/pong_game.dart';
+import 'package:easy_pong/models/computer_difficulty.dart';
 import 'package:easy_pong/notifiers/settings_notifier.dart';
 import 'package:easy_pong/overlays/welcome_overlay.dart';
 import 'package:easy_pong/overlays/winner_overlay.dart';
-import 'package:easy_pong/models/computer_difficulty.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
@@ -92,7 +92,6 @@ class _GameAppState extends ConsumerState<GameApp> {
                   (context, PongGame game) => WelcomeOverlay(
                     gameTheme: game.gameTheme,
                     isVsComputer: game.vsComputer,
-                    difficulty: game.difficulty,
                   ),
               GameState.gameOver.name:
                   (context, PongGame game) => WinnerOverlay(

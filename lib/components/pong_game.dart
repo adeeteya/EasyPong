@@ -2,9 +2,9 @@ import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:easy_pong/components/components.dart';
+import 'package:easy_pong/models/computer_difficulty.dart';
 import 'package:easy_pong/overlays/score_hud.dart';
 import 'package:easy_pong/screens/game_app.dart';
-import 'package:easy_pong/models/computer_difficulty.dart';
 import 'package:easy_pong/themes/game_theme.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -199,10 +199,7 @@ class PongGame extends FlameGame
         final desiredY = ball.position.y - aiPaddle.size.y / 2;
         switch (difficulty) {
           case ComputerDifficulty.impossible:
-            aiPaddle.position.y = desiredY.clamp(
-              0,
-              height - aiPaddle.size.y,
-            );
+            aiPaddle.position.y = desiredY.clamp(0, height - aiPaddle.size.y);
             break;
           case ComputerDifficulty.medium:
             aiPaddle.position.y = (aiPaddle.position.y +
