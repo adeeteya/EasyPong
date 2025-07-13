@@ -16,6 +16,7 @@ dependencies:
   flutter_animate: ^4.5.2
   flutter_riverpod: ^2.6.1
   shared_preferences: ^2.5.3
+  window_manager: ^0.5.1
 
 dev_dependencies:
   flutter_lints: ^6.0.0

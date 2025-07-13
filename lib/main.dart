@@ -1,6 +1,6 @@
+import 'package:easy_pong/full_screen_helper.dart';
 import 'package:easy_pong/notifiers/settings_notifier.dart';
 import 'package:easy_pong/screens/screens.dart';
-import 'package:flame/flame.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -9,9 +9,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await initFullScreen();
   if (!kIsWeb) {
-    await Flame.device.fullScreen();
-    await FlameAudio.audioCache.load("ping.mp3");
+    await FlameAudio.audioCache.load('ping.mp3');
   }
   final prefs = await SharedPreferences.getInstance();
   runApp(
