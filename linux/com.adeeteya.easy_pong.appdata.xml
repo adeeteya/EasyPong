@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+    <id>com.adeeteya.easy_pong</id>
+    <name>Easy Pong</name>
+    <summary>
+        An Over Engineered Pong Game
+    </summary>
+    <metadata_license>CC0-1.0</metadata_license>
+    <project_license>MIT</project_license>
+    <recommends>
+        <control>pointing</control>
+        <control>touch</control>
+    </recommends>
+    <developer_name>Aditya</developer_name>
+    <url type="bugtracker">https://github.com/adeeteya/EasyPong/issues</url>
+    <url type="homepage">https://github.com/adeeteya/EasyPong</url>
+    <url type="donation">https://buymeacoffee.com/adeeteya</url>
+    <description>
+        An Over Engineered Pong Game.
+    </description>
+    <screenshots>
+        <screenshot type="default">
+            <image type="source">
+                https://rawcdn.githack.com/adeeteya/EasyPong/refs/heads/master/screenshots/classic_theme.png
+            </image>
+            <caption>Classic Theme</caption>
+        </screenshot>
+        <screenshot>
+            <image type="source">
+                https://rawcdn.githack.com/adeeteya/EasyPong/refs/heads/master/screenshots/football_theme.png
+            </image>
+            <caption>Football Theme</caption>
+        </screenshot>
+        <screenshot>
+            <image type="source">
+                https://rawcdn.githack.com/adeeteya/EasyPong/refs/heads/master/screenshots/instructions_theme.png
+            </image>
+            <caption>Instructions Screen</caption>
+        </screenshot>
+        <screenshot>
+            <image type="source">
+                https://rawcdn.githack.com/adeeteya/EasyPong/refs/heads/master/screenshots/matrix_theme.png
+            </image>
+            <caption>Matrix Theme</caption>
+        </screenshot>
+        <screenshot>
+            <image type="source">
+                https://rawcdn.githack.com/adeeteya/EasyPong/refs/heads/master/screenshots/modern_theme.png
+            </image>
+            <caption>Modern Theme</caption>
+        </screenshot>
+        <screenshot>
+            <image type="source">
+                https://rawcdn.githack.com/adeeteya/EasyPong/refs/heads/master/screenshots/winner_screen.png
+            </image>
+            <caption>Winner Screen</caption>
+        </screenshot>
+    </screenshots>
+    <launchable type="desktop-id">com.adeeteya.easy_pong.desktop</launchable>
+    <releases>%{{APPDATA_RELEASE}}%
+        <release version="1.0.0" date="2025-22-06" />
+    </releases>
+    <content_rating type="oars-1.1" />
+    <update_contact>adeeteya@gmail.com</update_contact>
+</component>

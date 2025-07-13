@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.0.0
+Name=Easy Pong
+Comment=A Pong Game
+Exec=easy-pong
+Icon=${SNAP}/meta/gui/easy-pong.png
+Terminal=false
+Type=Application
+Categories=Games;
+Keywords=game;pong;arcade;

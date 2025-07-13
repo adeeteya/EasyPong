@@ -1,0 +1,34 @@
+name: easy-pong
+version: 1.0.0
+summary: A Pong Game
+description: Over Engineered Pong Game Made Using Flutter and Flame Game Engine.
+icon: snap/gui/easy-pong.png
+contact: mailto:adeeteya@gmail.com
+source-code: https://github.com/adeeteya/EasyPong
+issues: https://github.com/adeeteya/EasyPong/issues
+license: MIT
+
+confinement: strict
+base: core22
+grade: stable
+
+slots:
+  easy-pong:
+    interface: dbus
+    bus: session
+    name: com.adeeteya.easy_pong
+
+apps:
+  easy-pong:
+    command: easy_pong
+    extensions: [gnome]
+    plugs:
+      - desktop
+      - home
+    slots:
+      - easy-pong
+parts:
+  easy-pong:
+    source: .
+    plugin: flutter
+    flutter-target: lib/main.dart

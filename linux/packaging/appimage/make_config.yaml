@@ -1,0 +1,12 @@
+display_name: Easy Pong
+icon: snap/gui/easy-pong.png
+
+keywords:
+  - Pong
+  - Game
+
+generic_name: Easy Pong
+categories:
+  - Games
+
+startup_notify: true
