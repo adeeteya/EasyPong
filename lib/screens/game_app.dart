@@ -79,7 +79,7 @@ class _GameAppState extends ConsumerState<GameApp> {
       child: Scaffold(
         body: Builder(
           builder: (context) {
-            _game.updateSafeArea = MediaQuery.of(context).padding;
+            _game.updateSafeArea = MediaQuery.paddingOf(context);
             return GameWidget(
               game: _game,
               overlayBuilderMap: {
@@ -87,20 +87,20 @@ class _GameAppState extends ConsumerState<GameApp> {
                     (context, PongGame game) => WelcomeOverlay(
                       gameTheme: game.gameTheme,
                       isVsComputer: game.vsComputer,
-                  ),
-              GameState.gameOver.name:
-                  (context, PongGame game) => WinnerOverlay(
-                    gameTheme: game.gameTheme,
-                    leftPlayerScore: game.leftPlayerScore,
-                    rightPlayerScore: game.rightPlayerScore,
-                    isVsComputer: game.vsComputer,
-                    gameReplayPressed: () {
-                      game.overlays.clear();
-                      game.gameState = GameState.welcome;
-                    },
-                  ),
-            },
-          );
+                    ),
+                GameState.gameOver.name:
+                    (context, PongGame game) => WinnerOverlay(
+                      gameTheme: game.gameTheme,
+                      leftPlayerScore: game.leftPlayerScore,
+                      rightPlayerScore: game.rightPlayerScore,
+                      isVsComputer: game.vsComputer,
+                      gameReplayPressed: () {
+                        game.overlays.clear();
+                        game.gameState = GameState.welcome;
+                      },
+                    ),
+              },
+            );
           },
         ),
       ),
