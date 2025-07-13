@@ -21,6 +21,7 @@ class PongGame extends FlameGame
     required this.isSfxEnabled,
     required this.gameTheme,
     this.vsComputer = false,
+    this.safeAreaPadding = EdgeInsets.zero,
   }) : super(children: [ScreenHitbox()]);
 
   final bool isMobile;
@@ -29,6 +30,9 @@ class PongGame extends FlameGame
   final bool isSfxEnabled;
   final GameTheme gameTheme;
   final bool vsComputer;
+  EdgeInsets safeAreaPadding;
+
+  set updateSafeArea(EdgeInsets padding) => safeAreaPadding = padding;
   int leftPlayerScore = 0;
   int rightPlayerScore = 0;
   late final Vector2 paddleSize;
@@ -105,6 +109,7 @@ class PongGame extends FlameGame
         leftHudTextColor: gameTheme.leftHudTextColor,
         rightHudTextColor: gameTheme.rightHudTextColor,
         fontFamily: gameTheme.hudFontFamily,
+        topPadding: safeAreaPadding.top,
       ),
     );
 

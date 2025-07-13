@@ -77,14 +77,16 @@ class _GameAppState extends ConsumerState<GameApp> {
         }
       },
       child: Scaffold(
-        body: SafeArea(
-          child: GameWidget(
-            game: _game,
-            overlayBuilderMap: {
-              GameState.welcome.name:
-                  (context, PongGame game) => WelcomeOverlay(
-                    gameTheme: game.gameTheme,
-                    isVsComputer: game.vsComputer,
+        body: Builder(
+          builder: (context) {
+            _game.updateSafeArea = MediaQuery.of(context).padding;
+            return GameWidget(
+              game: _game,
+              overlayBuilderMap: {
+                GameState.welcome.name:
+                    (context, PongGame game) => WelcomeOverlay(
+                      gameTheme: game.gameTheme,
+                      isVsComputer: game.vsComputer,
                   ),
               GameState.gameOver.name:
                   (context, PongGame game) => WinnerOverlay(
@@ -98,7 +100,8 @@ class _GameAppState extends ConsumerState<GameApp> {
                     },
                   ),
             },
-          ),
+          );
+          },
         ),
       ),
     );
