@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:easy_pong/models/computer_difficulty.dart';
 import 'package:easy_pong/notifiers/settings_notifier.dart';
 import 'package:easy_pong/screens/screens.dart';
 import 'package:flame/flame.dart';
@@ -51,12 +52,20 @@ class EasyPongApp extends StatelessWidget {
         ),
         fontFamily: 'AtariClassic',
       ),
-      initialRoute: "/",
+      initialRoute: '/',
       routes: {
-        "/": (context) => const HomeScreen(),
-        "/local_multiplayer": (context) => const GameApp(),
-        "/vs_computer": (context) => const GameApp(vsComputer: true),
-        "/settings": (context) => const SettingsScreen(),
+        '/': (context) => const HomeScreen(),
+        '/local_multiplayer': (context) => const GameApp(),
+        '/computer_difficulty': (context) => const ComputerDifficultyScreen(),
+        '/vs_computer': (context) {
+          final difficulty =
+              ModalRoute.of(context)?.settings.arguments as ComputerDifficulty?;
+          return GameApp(
+            vsComputer: true,
+            difficulty: difficulty ?? ComputerDifficulty.impossible,
+          );
+        },
+        '/settings': (context) => const SettingsScreen(),
       },
     );
   }
