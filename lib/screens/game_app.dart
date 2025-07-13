@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:math' as math;
 
 import 'package:easy_pong/components/pong_game.dart';
 import 'package:easy_pong/models/computer_difficulty.dart';
@@ -84,28 +85,33 @@ class _GameAppState extends ConsumerState<GameApp> {
         }
       },
       child: Scaffold(
-        body: SafeArea(
-          child: GameWidget(
-            game: _game,
-            overlayBuilderMap: {
-              GameState.welcome.name:
-                  (context, PongGame game) => WelcomeOverlay(
-                    gameTheme: game.gameTheme,
-                    isVsComputer: game.vsComputer,
-                  ),
-              GameState.gameOver.name:
-                  (context, PongGame game) => WinnerOverlay(
-                    gameTheme: game.gameTheme,
-                    leftPlayerScore: game.leftPlayerScore,
-                    rightPlayerScore: game.rightPlayerScore,
-                    isVsComputer: game.vsComputer,
-                    gameReplayPressed: () {
-                      game.overlays.clear();
-                      game.gameState = GameState.welcome;
-                    },
-                  ),
-            },
-          ),
+        body: Builder(
+          builder: (context) {
+            final padding = MediaQuery.paddingOf(context);
+            final maxPadding = math.max(padding.left, padding.right);
+            _game.horizontalSafeArea = math.max(maxPadding, 20);
+            return GameWidget(
+              game: _game,
+              overlayBuilderMap: {
+                GameState.welcome.name:
+                    (context, PongGame game) => WelcomeOverlay(
+                      gameTheme: game.gameTheme,
+                      isVsComputer: game.vsComputer,
+                    ),
+                GameState.gameOver.name:
+                    (context, PongGame game) => WinnerOverlay(
+                      gameTheme: game.gameTheme,
+                      leftPlayerScore: game.leftPlayerScore,
+                      rightPlayerScore: game.rightPlayerScore,
+                      isVsComputer: game.vsComputer,
+                      gameReplayPressed: () {
+                        game.overlays.clear();
+                        game.gameState = GameState.welcome;
+                      },
+                    ),
+              },
+            );
+          },
         ),
       ),
     );

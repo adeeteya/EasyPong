@@ -37,6 +37,7 @@ class PongGame extends FlameGame
   late final Vector2 paddleSize;
   late final double paddleStep;
   final rand = math.Random();
+  double horizontalSafeArea = 0;
 
   late GameState _gameState;
   GameState get gameState => _gameState;
@@ -117,7 +118,7 @@ class PongGame extends FlameGame
         key: ComponentKey.named('LeftPaddle'),
         paddleBorderRadius: gameTheme.paddleBorderRadius,
         paddleColor: gameTheme.leftPaddleColor,
-        position: Vector2(20, height / 2),
+        position: Vector2(horizontalSafeArea, height / 2),
         size: paddleSize,
       ),
     );
@@ -128,7 +129,10 @@ class PongGame extends FlameGame
         key: ComponentKey.named('RightPaddle'),
         paddleBorderRadius: gameTheme.paddleBorderRadius,
         paddleColor: gameTheme.rightPaddleColor,
-        position: Vector2(width - paddleSize.x - 20, height / 2),
+        position: Vector2(
+          width - paddleSize.x - horizontalSafeArea,
+          height / 2,
+        ),
         size: paddleSize,
       ),
     );
