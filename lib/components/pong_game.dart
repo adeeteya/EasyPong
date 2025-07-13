@@ -118,7 +118,7 @@ class PongGame extends FlameGame
         key: ComponentKey.named('LeftPaddle'),
         paddleBorderRadius: gameTheme.paddleBorderRadius,
         paddleColor: gameTheme.leftPaddleColor,
-        position: Vector2(horizontalSafeArea + 20, height / 2),
+        position: Vector2(horizontalSafeArea, height / 2),
         size: paddleSize,
       ),
     );
@@ -130,7 +130,7 @@ class PongGame extends FlameGame
         paddleBorderRadius: gameTheme.paddleBorderRadius,
         paddleColor: gameTheme.rightPaddleColor,
         position: Vector2(
-          width - paddleSize.x - horizontalSafeArea - 20,
+          width - paddleSize.x - horizontalSafeArea,
           height / 2,
         ),
         size: paddleSize,

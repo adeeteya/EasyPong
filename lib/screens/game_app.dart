@@ -87,8 +87,9 @@ class _GameAppState extends ConsumerState<GameApp> {
       child: Scaffold(
         body: Builder(
           builder: (context) {
-            final padding = MediaQuery.of(context).padding;
-            _game.horizontalSafeArea = math.max(padding.left, padding.right);
+            final padding = MediaQuery.paddingOf(context);
+            final maxPadding = math.max(padding.left, padding.right);
+            _game.horizontalSafeArea = math.max(maxPadding, 20);
             return GameWidget(
               game: _game,
               overlayBuilderMap: {
