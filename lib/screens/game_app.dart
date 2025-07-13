@@ -4,6 +4,7 @@ import 'package:easy_pong/components/pong_game.dart';
 import 'package:easy_pong/notifiers/settings_notifier.dart';
 import 'package:easy_pong/overlays/welcome_overlay.dart';
 import 'package:easy_pong/overlays/winner_overlay.dart';
+import 'package:easy_pong/models/computer_difficulty.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
@@ -14,7 +15,12 @@ enum GameState { welcome, gameOver, playing }
 
 class GameApp extends ConsumerStatefulWidget {
   final bool vsComputer;
-  const GameApp({super.key, this.vsComputer = false});
+  final ComputerDifficulty difficulty;
+  const GameApp({
+    super.key,
+    this.vsComputer = false,
+    this.difficulty = ComputerDifficulty.impossible,
+  });
 
   @override
   ConsumerState<GameApp> createState() => _GameAppState();
@@ -32,6 +38,7 @@ class _GameAppState extends ConsumerState<GameApp> {
       isSfxEnabled: ref.read(settingsProvider).isSfxEnabled,
       gameTheme: ref.read(settingsProvider).getGameTheme(),
       vsComputer: widget.vsComputer,
+      difficulty: widget.difficulty,
     );
   }
 
@@ -85,6 +92,7 @@ class _GameAppState extends ConsumerState<GameApp> {
                   (context, PongGame game) => WelcomeOverlay(
                     gameTheme: game.gameTheme,
                     isVsComputer: game.vsComputer,
+                    difficulty: game.difficulty,
                   ),
               GameState.gameOver.name:
                   (context, PongGame game) => WinnerOverlay(

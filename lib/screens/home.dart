@@ -41,7 +41,8 @@ class HomeScreen extends StatelessWidget {
                   titleText: "Play vs Computer",
                   width: isPhone() ? 250 : 350,
                   onTap: () async {
-                    await Navigator.of(context).pushNamed("/vs_computer");
+                    await Navigator.of(context)
+                        .pushNamed('/computer_difficulty');
                     await Flame.device.setPortrait();
                   },
                 ),

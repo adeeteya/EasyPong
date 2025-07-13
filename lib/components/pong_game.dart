@@ -4,6 +4,7 @@ import 'dart:math' as math;
 import 'package:easy_pong/components/components.dart';
 import 'package:easy_pong/overlays/score_hud.dart';
 import 'package:easy_pong/screens/game_app.dart';
+import 'package:easy_pong/models/computer_difficulty.dart';
 import 'package:easy_pong/themes/game_theme.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -21,6 +22,7 @@ class PongGame extends FlameGame
     required this.isSfxEnabled,
     required this.gameTheme,
     this.vsComputer = false,
+    this.difficulty = ComputerDifficulty.impossible,
   }) : super(children: [ScreenHitbox()]);
 
   final bool isMobile;
@@ -29,6 +31,7 @@ class PongGame extends FlameGame
   final bool isSfxEnabled;
   final GameTheme gameTheme;
   final bool vsComputer;
+  final ComputerDifficulty difficulty;
   int leftPlayerScore = 0;
   int rightPlayerScore = 0;
   late final Vector2 paddleSize;
@@ -193,10 +196,25 @@ class PongGame extends FlameGame
       final balls = world.children.query<Ball>();
       if (aiPaddle != null && balls.isNotEmpty) {
         final ball = balls.first;
-        aiPaddle.position.y = (ball.position.y - aiPaddle.size.y / 2).clamp(
-          0,
-          height - aiPaddle.size.y,
-        );
+        final desiredY = ball.position.y - aiPaddle.size.y / 2;
+        switch (difficulty) {
+          case ComputerDifficulty.impossible:
+            aiPaddle.position.y = desiredY.clamp(
+              0,
+              height - aiPaddle.size.y,
+            );
+            break;
+          case ComputerDifficulty.medium:
+            aiPaddle.position.y = (aiPaddle.position.y +
+                    (desiredY - aiPaddle.position.y) * 0.1)
+                .clamp(0, height - aiPaddle.size.y);
+            break;
+          case ComputerDifficulty.easy:
+            aiPaddle.position.y = (aiPaddle.position.y +
+                    (desiredY - aiPaddle.position.y) * 0.05)
+                .clamp(0, height - aiPaddle.size.y);
+            break;
+        }
       }
     }
   }
