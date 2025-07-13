@@ -20,6 +20,7 @@ class PongGame extends FlameGame
     required this.isMobile,
     required this.isSfxEnabled,
     required this.gameTheme,
+    this.vsComputer = false,
   }) : super(children: [ScreenHitbox()]);
 
   final bool isMobile;
@@ -27,6 +28,7 @@ class PongGame extends FlameGame
   late final double height;
   final bool isSfxEnabled;
   final GameTheme gameTheme;
+  final bool vsComputer;
   int leftPlayerScore = 0;
   int rightPlayerScore = 0;
   late final Vector2 paddleSize;
@@ -148,7 +150,7 @@ class PongGame extends FlameGame
       findByKey<Paddle>(
         ComponentKey.named('LeftPaddle'),
       )?.moveBy(event.localDelta.y * 2);
-    } else {
+    } else if (!vsComputer) {
       //To Move the Right Paddle By Drag
       findByKey<Paddle>(
         ComponentKey.named('RightPaddle'),
@@ -163,9 +165,10 @@ class PongGame extends FlameGame
   ) {
     super.onKeyEvent(event, keysPressed);
     //To Move the Right Paddle
-    if (keysPressed.contains(LogicalKeyboardKey.arrowUp)) {
+    if (!vsComputer && keysPressed.contains(LogicalKeyboardKey.arrowUp)) {
       findByKey<Paddle>(ComponentKey.named('RightPaddle'))?.moveBy(-paddleStep);
-    } else if (keysPressed.contains(LogicalKeyboardKey.arrowDown)) {
+    } else if (!vsComputer &&
+        keysPressed.contains(LogicalKeyboardKey.arrowDown)) {
       findByKey<Paddle>(ComponentKey.named('RightPaddle'))?.moveBy(paddleStep);
     }
     //To Move the Left Paddle
@@ -180,6 +183,22 @@ class PongGame extends FlameGame
       startGame();
     }
     return KeyEventResult.handled;
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    if (vsComputer && gameState == GameState.playing) {
+      final aiPaddle = findByKey<Paddle>(ComponentKey.named('RightPaddle'));
+      final balls = world.children.query<Ball>();
+      if (aiPaddle != null && balls.isNotEmpty) {
+        final ball = balls.first;
+        aiPaddle.position.y = (ball.position.y - aiPaddle.size.y / 2).clamp(
+          0,
+          height - aiPaddle.size.y,
+        );
+      }
+    }
   }
 
   void playPing() {

@@ -4,7 +4,12 @@ import 'package:flutter/material.dart';
 
 class WelcomeOverlay extends StatelessWidget {
   final GameTheme gameTheme;
-  const WelcomeOverlay({super.key, required this.gameTheme});
+  final bool isVsComputer;
+  const WelcomeOverlay({
+    super.key,
+    required this.gameTheme,
+    this.isVsComputer = false,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +51,9 @@ class WelcomeOverlay extends StatelessWidget {
           Expanded(
             child: Center(
               child: Text(
-                "Up Arrow to Move Up\nDown Arrow to Move Down",
+                isVsComputer
+                    ? "Computer Opponent"
+                    : "Up Arrow to Move Up\nDown Arrow to Move Down",
                 style: TextStyle(color: gameTheme.leftHudTextColor),
               ),
             ),
