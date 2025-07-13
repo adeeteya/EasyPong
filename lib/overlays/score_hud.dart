@@ -1,7 +1,8 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
+
 import 'package:easy_pong/components/pong_game.dart';
 import 'package:flame/components.dart';
+import 'package:flutter/material.dart';
 
 class ScoreHud extends PositionComponent with HasGameReference<PongGame> {
   ScoreHud({

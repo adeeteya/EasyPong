@@ -49,7 +49,7 @@ class TileCheckboxButton extends ConsumerWidget {
               ),
               const Spacer(),
               Text(
-                (isChecked) ? "<on>" : "<off>",
+                isChecked ? "<on>" : "<off>",
                 textAlign: TextAlign.center,
                 style: (width <= 250)
                     ? Theme.of(context).textTheme.bodySmall

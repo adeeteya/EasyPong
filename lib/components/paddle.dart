@@ -1,10 +1,10 @@
-import 'package:easy_pong/extensions.dart';
-import 'package:flutter/material.dart';
 import 'package:easy_pong/components/pong_game.dart';
+import 'package:easy_pong/extensions.dart';
 import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
 import 'package:flame/events.dart';
+import 'package:flutter/material.dart';
 
 class Paddle extends PositionComponent
     with DragCallbacks, HasGameReference<PongGame> {

@@ -1,5 +1,9 @@
 import 'dart:async';
+import 'dart:math' as math;
+
+import 'package:easy_pong/components/components.dart';
 import 'package:easy_pong/overlays/score_hud.dart';
+import 'package:easy_pong/screens/game_app.dart';
 import 'package:easy_pong/themes/game_theme.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
@@ -7,9 +11,7 @@ import 'package:flame/game.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'dart:math' as math;
-import 'package:easy_pong/screens/game_app.dart';
-import 'package:easy_pong/components/components.dart';
+
 export 'package:easy_pong/screens/game_app.dart';
 
 class PongGame extends FlameGame
