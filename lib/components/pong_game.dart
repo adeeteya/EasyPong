@@ -16,19 +16,15 @@ export 'package:easy_pong/screens/game_app.dart';
 
 class PongGame extends FlameGame
     with HasCollisionDetection, KeyboardEvents, TapDetector, DragCallbacks {
-  PongGame(
-      {required this.width,
-      required this.height,
-      required this.isSfxEnabled,
-      required this.gameTheme})
-      : super(
-          children: [ScreenHitbox()],
-          camera:
-              CameraComponent.withFixedResolution(width: width, height: height),
-        );
+  PongGame({
+    required this.isMobile,
+    required this.isSfxEnabled,
+    required this.gameTheme,
+  }) : super(children: [ScreenHitbox()]);
 
-  final double width;
-  final double height;
+  final bool isMobile;
+  late final double width;
+  late final double height;
   final bool isSfxEnabled;
   final GameTheme gameTheme;
   int leftPlayerScore = 0;
@@ -57,13 +53,25 @@ class PongGame extends FlameGame
   @override
   FutureOr<void> onLoad() {
     super.onLoad();
+    if (isMobile) {
+      width = size[1];
+      height = size[0];
+    } else {
+      width = size[0];
+      height = size[1];
+    }
+    super.camera = CameraComponent.withFixedResolution(
+      width: width,
+      height: height,
+    );
     camera.viewfinder.anchor = Anchor.topLeft;
-    camera.backdrop = (gameTheme.backgroundImageAssetPath != null)
-        ? ImageAssetBackground(gameTheme.backgroundImageAssetPath!)
-        : CenterLineDivider(
-            isDividerContinuous: gameTheme.isDividerContinuous,
-            dividerColor: gameTheme.dividerColor,
-          );
+    camera.backdrop =
+        (gameTheme.backgroundImageAssetPath != null)
+            ? ImageAssetBackground(gameTheme.backgroundImageAssetPath!)
+            : CenterLineDivider(
+              isDividerContinuous: gameTheme.isDividerContinuous,
+              dividerColor: gameTheme.dividerColor,
+            );
     paddleSize = Vector2(width * 0.02, height * 0.2);
     paddleStep = height * 0.05;
     gameState = GameState.welcome;
@@ -137,18 +145,22 @@ class PongGame extends FlameGame
     super.onDragUpdate(event);
     if (event.canvasStartPosition.x < width / 2) {
       //To Move the Left Paddle By Drag
-      findByKey<Paddle>(ComponentKey.named('LeftPaddle'))
-          ?.moveBy(event.localDelta.y * 2);
+      findByKey<Paddle>(
+        ComponentKey.named('LeftPaddle'),
+      )?.moveBy(event.localDelta.y * 2);
     } else {
       //To Move the Right Paddle By Drag
-      findByKey<Paddle>(ComponentKey.named('RightPaddle'))
-          ?.moveBy(event.localDelta.y * 2);
+      findByKey<Paddle>(
+        ComponentKey.named('RightPaddle'),
+      )?.moveBy(event.localDelta.y * 2);
     }
   }
 
   @override
   KeyEventResult onKeyEvent(
-      KeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    KeyEvent event,
+    Set<LogicalKeyboardKey> keysPressed,
+  ) {
     super.onKeyEvent(event, keysPressed);
     //To Move the Right Paddle
     if (keysPressed.contains(LogicalKeyboardKey.arrowUp)) {
@@ -181,8 +193,9 @@ class PongGame extends FlameGame
       Ball(
         color: gameTheme.ballColor,
         isBallRound: gameTheme.isBallRound,
-        velocity:
-            randomBallVelocity(startsWithRightPlayer: startsWithRightPlayer),
+        velocity: randomBallVelocity(
+          startsWithRightPlayer: startsWithRightPlayer,
+        ),
         size: Vector2(width * 0.02, width * 0.02),
         position: Vector2(width / 2, height / 2),
       ),
@@ -191,19 +204,22 @@ class PongGame extends FlameGame
 
   Vector2 randomBallVelocity({bool? startsWithRightPlayer}) {
     if (startsWithRightPlayer == null) {
-      return Vector2((rand.nextDouble() - 0.5) * width,
-              (rand.nextDouble() * 0.4 - 0.2) * height)
-          .normalized()
+      return Vector2(
+          (rand.nextDouble() - 0.5) * width,
+          (rand.nextDouble() * 0.4 - 0.2) * height,
+        ).normalized()
         ..scale(width / 1.5);
     } else if (startsWithRightPlayer) {
-      return Vector2((rand.nextDouble() * 0.35 + 0.15) * width,
-              (rand.nextDouble() * 0.4 - 0.2) * height)
-          .normalized()
+      return Vector2(
+          (rand.nextDouble() * 0.35 + 0.15) * width,
+          (rand.nextDouble() * 0.4 - 0.2) * height,
+        ).normalized()
         ..scale(width / 1.5);
     } else {
-      return Vector2((rand.nextDouble() * 0.35 - 0.5) * width,
-              (rand.nextDouble() * 0.4 - 0.2) * height)
-          .normalized()
+      return Vector2(
+          (rand.nextDouble() * 0.35 - 0.5) * width,
+          (rand.nextDouble() * 0.4 - 0.2) * height,
+        ).normalized()
         ..scale(width / 1.5);
     }
   }
