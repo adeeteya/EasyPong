@@ -13,7 +13,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 enum GameState { welcome, gameOver, playing }
 
 class GameApp extends ConsumerStatefulWidget {
-  const GameApp({super.key});
+  final bool vsComputer;
+  const GameApp({super.key, this.vsComputer = false});
 
   @override
   ConsumerState<GameApp> createState() => _GameAppState();
@@ -30,6 +31,7 @@ class _GameAppState extends ConsumerState<GameApp> {
       isMobile: (!kIsWeb) && (Platform.isAndroid || Platform.isIOS),
       isSfxEnabled: ref.read(settingsProvider).isSfxEnabled,
       gameTheme: ref.read(settingsProvider).getGameTheme(),
+      vsComputer: widget.vsComputer,
     );
   }
 
@@ -80,13 +82,16 @@ class _GameAppState extends ConsumerState<GameApp> {
             game: _game,
             overlayBuilderMap: {
               GameState.welcome.name:
-                  (context, PongGame game) =>
-                      WelcomeOverlay(gameTheme: game.gameTheme),
+                  (context, PongGame game) => WelcomeOverlay(
+                    gameTheme: game.gameTheme,
+                    isVsComputer: game.vsComputer,
+                  ),
               GameState.gameOver.name:
                   (context, PongGame game) => WinnerOverlay(
                     gameTheme: game.gameTheme,
                     leftPlayerScore: game.leftPlayerScore,
                     rightPlayerScore: game.rightPlayerScore,
+                    isVsComputer: game.vsComputer,
                     gameReplayPressed: () {
                       game.overlays.clear();
                       game.gameState = GameState.welcome;

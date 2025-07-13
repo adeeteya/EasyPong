@@ -7,12 +7,14 @@ class WinnerOverlay extends StatelessWidget {
   final GameTheme gameTheme;
   final int leftPlayerScore;
   final int rightPlayerScore;
+  final bool isVsComputer;
   final VoidCallback gameReplayPressed;
   const WinnerOverlay({
     super.key,
     required this.gameTheme,
     required this.leftPlayerScore,
     required this.rightPlayerScore,
+    this.isVsComputer = false,
     required this.gameReplayPressed,
   });
 
@@ -30,7 +32,9 @@ class WinnerOverlay extends StatelessWidget {
                 Text(
                   "$leftPlayerScore",
                   style: TextStyle(
-                      color: gameTheme.leftHudTextColor, fontSize: 32),
+                    color: gameTheme.leftHudTextColor,
+                    fontSize: 32,
+                  ),
                 ),
                 const SizedBox(height: 10),
                 Text(
@@ -38,7 +42,9 @@ class WinnerOverlay extends StatelessWidget {
                       ? "You Win"
                       : "You Lose",
                   style: TextStyle(
-                      color: gameTheme.leftHudTextColor, fontSize: 32),
+                    color: gameTheme.leftHudTextColor,
+                    fontSize: 32,
+                  ),
                 ),
               ],
             ),
@@ -68,13 +74,23 @@ class WinnerOverlay extends StatelessWidget {
                 Text(
                   "$rightPlayerScore",
                   style: TextStyle(
-                      color: gameTheme.rightHudTextColor, fontSize: 32),
+                    color: gameTheme.rightHudTextColor,
+                    fontSize: 32,
+                  ),
                 ),
                 const SizedBox(height: 10),
                 Text(
-                  (rightPlayerScore > leftPlayerScore) ? "You Win" : "You Lose",
+                  isVsComputer
+                      ? (rightPlayerScore > leftPlayerScore
+                          ? "Computer Wins"
+                          : "Computer Loses")
+                      : (rightPlayerScore > leftPlayerScore
+                          ? "You Win"
+                          : "You Lose"),
                   style: TextStyle(
-                      color: gameTheme.rightHudTextColor, fontSize: 32),
+                    color: gameTheme.rightHudTextColor,
+                    fontSize: 32,
+                  ),
                 ),
               ],
             ),
