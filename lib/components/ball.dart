@@ -51,11 +51,14 @@ class Ball extends PositionComponent
       Set<Vector2> intersectionPoints, PositionComponent other) {
     super.onCollisionStart(intersectionPoints, other);
     if (other is ScreenHitbox) {
+      final speed = velocity.length;
       if (intersectionPoints.first.y <= 0) {
         velocity.y = -velocity.y;
+        velocity.setFrom(velocity.normalized()..scale(speed));
         game.playPing();
       } else if (intersectionPoints.first.y >= game.height) {
         velocity.y = -velocity.y;
+        velocity.setFrom(velocity.normalized()..scale(speed));
         game.playPing();
       } else if (intersectionPoints.first.x <= 0) {
         add(RemoveEffect(
@@ -71,11 +74,14 @@ class Ball extends PositionComponent
             }));
       }
     } else if (other is Paddle) {
+      final speed = velocity.length;
       velocity.x = -velocity.x;
+      final impact =
+          ((position.y - other.position.y) / other.size.y).clamp(-0.5, 0.5);
+      velocity.y = velocity.y + impact * game.height * 0.3 +
+          other.verticalVelocity * 0.05;
+      velocity.setFrom(velocity.normalized()..scale(speed));
       game.playPing();
-      //Movement of ball based on where it hit the paddle
-      velocity.y = velocity.y +
-          (position.y - other.position.y) / other.size.y * game.height * 0.3;
     }
   }
 }
