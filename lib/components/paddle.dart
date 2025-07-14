@@ -21,6 +21,11 @@ class Paddle extends PositionComponent
   final double paddleBorderRadius;
   final Color paddleColor;
 
+  double _previousY = 0;
+  double _velocityY = 0;
+
+  double get verticalVelocity => _velocityY;
+
   @override
   void render(Canvas canvas) {
     super.render(canvas);
@@ -31,6 +36,19 @@ class Paddle extends PositionComponent
       ),
       paddleColor.filledPaint(),
     );
+  }
+
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    _previousY = position.y;
+  }
+
+  @override
+  void update(double dt) {
+    super.update(dt);
+    _velocityY = (position.y - _previousY) / dt;
+    _previousY = position.y;
   }
 
   @override
