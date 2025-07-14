@@ -43,6 +43,13 @@ class _GameAppState extends ConsumerState<GameApp> {
     );
   }
 
+  @override
+  void dispose() {
+    _game.pauseEngine();
+    _game.overlays.clear();
+    super.dispose();
+  }
+
   Future<bool> _onWillPop() async {
     if (_game.gameState == GameState.playing) {
       _game.pauseEngine();

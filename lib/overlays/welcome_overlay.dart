@@ -33,7 +33,9 @@ class WelcomeOverlay extends StatelessWidget {
           Expanded(
             child: Center(
               child: Text(
-                "W to Move Up\nS to Move Down",
+                isVsComputer
+                    ? 'Computer Opponent'
+                    : 'W to Move Up\nS to Move Down',
                 style: TextStyle(color: gameTheme.leftHudTextColor),
               ),
             ),
@@ -51,9 +53,7 @@ class WelcomeOverlay extends StatelessWidget {
           Expanded(
             child: Center(
               child: Text(
-                isVsComputer
-                    ? 'Computer Opponent'
-                    : 'Up Arrow to Move Up\nDown Arrow to Move Down',
+                'Up Arrow to Move Up\nDown Arrow to Move Down',
                 style: TextStyle(color: gameTheme.leftHudTextColor),
               ),
             ),

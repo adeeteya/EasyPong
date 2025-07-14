@@ -39,9 +39,13 @@ class WinnerOverlay extends StatelessWidget {
                   ),
                   const SizedBox(height: 10),
                   Text(
-                    (leftPlayerScore >= rightPlayerScore)
-                        ? "You\nWin"
-                        : "You\nLose",
+                    isVsComputer
+                        ? (leftPlayerScore >= rightPlayerScore
+                            ? "Computer\nWins"
+                            : "Computer\nLoses")
+                        : (leftPlayerScore >= rightPlayerScore
+                            ? "You\nWin"
+                            : "You\nLose"),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: gameTheme.leftHudTextColor,
@@ -88,8 +92,8 @@ class WinnerOverlay extends StatelessWidget {
                   Text(
                     isVsComputer
                         ? (rightPlayerScore > leftPlayerScore
-                            ? "Computer\nWins"
-                            : "Computer\nLoses")
+                            ? "You\nWin"
+                            : "You\nLose")
                         : (rightPlayerScore > leftPlayerScore
                             ? "You\nWin"
                             : "You\nLose"),
