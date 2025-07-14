@@ -152,13 +152,13 @@ class PongGame extends FlameGame
   @override
   void onDragUpdate(DragUpdateEvent event) {
     super.onDragUpdate(event);
-    if (event.canvasStartPosition.x < width / 2) {
-      //To Move the Left Paddle By Drag
+    if (!vsComputer && event.canvasStartPosition.x < width / 2) {
+      // Move the left paddle only when playing local multiplayer
       findByKey<Paddle>(
         ComponentKey.named('LeftPaddle'),
       )?.moveBy(event.localDelta.y * 2);
-    } else if (!vsComputer) {
-      //To Move the Right Paddle By Drag
+    } else if (event.canvasStartPosition.x >= width / 2) {
+      // Always allow the player to control the right paddle
       findByKey<Paddle>(
         ComponentKey.named('RightPaddle'),
       )?.moveBy(event.localDelta.y * 2);
@@ -171,17 +171,16 @@ class PongGame extends FlameGame
     Set<LogicalKeyboardKey> keysPressed,
   ) {
     super.onKeyEvent(event, keysPressed);
-    //To Move the Right Paddle
-    if (!vsComputer && keysPressed.contains(LogicalKeyboardKey.arrowUp)) {
+    // Move the right paddle (player) using arrow keys
+    if (keysPressed.contains(LogicalKeyboardKey.arrowUp)) {
       findByKey<Paddle>(ComponentKey.named('RightPaddle'))?.moveBy(-paddleStep);
-    } else if (!vsComputer &&
-        keysPressed.contains(LogicalKeyboardKey.arrowDown)) {
+    } else if (keysPressed.contains(LogicalKeyboardKey.arrowDown)) {
       findByKey<Paddle>(ComponentKey.named('RightPaddle'))?.moveBy(paddleStep);
     }
-    //To Move the Left Paddle
-    if (keysPressed.contains(LogicalKeyboardKey.keyW)) {
+    // Move the left paddle only in local multiplayer mode
+    if (!vsComputer && keysPressed.contains(LogicalKeyboardKey.keyW)) {
       findByKey<Paddle>(ComponentKey.named('LeftPaddle'))?.moveBy(-paddleStep);
-    } else if (keysPressed.contains(LogicalKeyboardKey.keyS)) {
+    } else if (!vsComputer && keysPressed.contains(LogicalKeyboardKey.keyS)) {
       findByKey<Paddle>(ComponentKey.named('LeftPaddle'))?.moveBy(paddleStep);
     }
     //To start the game in devices connected to the keyboard
@@ -196,7 +195,8 @@ class PongGame extends FlameGame
   void update(double dt) {
     super.update(dt);
     if (vsComputer && gameState == GameState.playing) {
-      final aiPaddle = findByKey<Paddle>(ComponentKey.named('RightPaddle'));
+      // Computer controls the left paddle in vs computer mode
+      final aiPaddle = findByKey<Paddle>(ComponentKey.named('LeftPaddle'));
       final balls = world.children.query<Ball>();
       if (aiPaddle != null && balls.isNotEmpty) {
         final ball = balls.first;
