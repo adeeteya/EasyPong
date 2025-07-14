@@ -6,7 +6,8 @@ class OnlineMultiplayerScreen extends StatefulWidget {
   const OnlineMultiplayerScreen({super.key});
 
   @override
-  State<OnlineMultiplayerScreen> createState() => _OnlineMultiplayerScreenState();
+  State<OnlineMultiplayerScreen> createState() =>
+      _OnlineMultiplayerScreenState();
 }
 
 class _OnlineMultiplayerScreenState extends State<OnlineMultiplayerScreen> {
@@ -16,7 +17,7 @@ class _OnlineMultiplayerScreenState extends State<OnlineMultiplayerScreen> {
     final roomRef = FirebaseDatabase.instance.ref('rooms').push();
     await roomRef.set({'createdAt': DateTime.now().toIso8601String()});
     if (!mounted) return;
-    Navigator.of(context).pushReplacement(
+    await Navigator.of(context).pushReplacement(
       MaterialPageRoute(builder: (_) => GameApp(roomId: roomRef.key)),
     );
   }
@@ -24,9 +25,9 @@ class _OnlineMultiplayerScreenState extends State<OnlineMultiplayerScreen> {
   void _joinRoom() {
     final id = _controller.text.trim();
     if (id.isEmpty) return;
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => GameApp(roomId: id)),
-    );
+    Navigator.of(
+      context,
+    ).pushReplacement(MaterialPageRoute(builder: (_) => GameApp(roomId: id)));
   }
 
   @override
@@ -57,4 +58,3 @@ class _OnlineMultiplayerScreenState extends State<OnlineMultiplayerScreen> {
     );
   }
 }
-

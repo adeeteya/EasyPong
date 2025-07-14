@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "436275011199",
+    "project_id": "easy-pong-35665",
+    "storage_bucket": "easy-pong-35665.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:436275011199:android:a1f019a5da19b59262294a",
+        "android_client_info": {
+          "package_name": "com.adeeteya.easy_pong"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAZZuvKW1zk18Mu8DjyXVxEoVbDrLY_hOY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
