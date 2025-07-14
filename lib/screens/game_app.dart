@@ -14,7 +14,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-enum GameState { welcome, gameOver, playing }
+enum GameState { welcome, gameOver, playing, paused }
 
 class GameApp extends ConsumerStatefulWidget {
   final bool vsComputer;
@@ -118,7 +118,7 @@ class _GameAppState extends ConsumerState<GameApp> {
                         game.gameState = GameState.welcome;
                       },
                     ),
-                'PauseMenuOverlay':
+                GameState.paused.name:
                     (context, PongGame game) => PauseMenuOverlay(game: game),
                 'PauseButtonOverlay':
                     (context, PongGame game) => PauseButtonOverlay(game: game),

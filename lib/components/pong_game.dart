@@ -51,15 +51,22 @@ class PongGame extends FlameGame
         camera.viewport.removeAll(camera.viewport.children.query<ScoreHud>());
         world.removeAll(world.children.query<Paddle>());
         overlays.add(gameState.name);
-        overlays.remove('PauseMenuOverlay');
+        overlays.remove(GameState.paused.name);
         overlays.remove('PauseButtonOverlay');
         _isPaused = false;
         break;
       case GameState.playing:
         overlays.remove(GameState.welcome.name);
         overlays.remove(GameState.gameOver.name);
-        overlays.remove('PauseMenuOverlay');
+        overlays.remove(GameState.paused.name);
         overlays.add('PauseButtonOverlay');
+        break;
+      case GameState.paused:
+        overlays.add(GameState.paused.name);
+        overlays.remove(GameState.welcome.name);
+        overlays.remove(GameState.gameOver.name);
+        overlays.remove('PauseButtonOverlay');
+        break;
     }
   }
 
@@ -295,10 +302,10 @@ class PongGame extends FlameGame
   void togglePause() {
     if (_isPaused) {
       resumeEngine();
-      overlays.remove('PauseMenuOverlay');
+      gameState = GameState.playing;
     } else {
       pauseEngine();
-      overlays.add('PauseMenuOverlay');
+      gameState = GameState.paused;
     }
     _isPaused = !_isPaused;
   }

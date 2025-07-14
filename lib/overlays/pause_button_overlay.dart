@@ -9,10 +9,13 @@ class PauseButtonOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Align(
-        alignment: Alignment.topRight,
+        alignment: Alignment.topCenter,
         child: IconButton(
           icon: const Icon(Icons.pause),
-          color: game.gameTheme.ballColor,
+          style: IconButton.styleFrom(
+            foregroundColor: game.gameTheme.backgroundColor,
+            backgroundColor: game.gameTheme.ballColor,
+          ),
           onPressed: game.togglePause,
         ),
       ),
