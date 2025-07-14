@@ -38,6 +38,15 @@ class HomeScreen extends StatelessWidget {
                 ),
                 const SizedBox(height: 20),
                 TileButton(
+                  titleText: "Online Multiplayer",
+                  width: isPhone() ? 250 : 350,
+                  onTap: () async {
+                    await Navigator.of(context).pushNamed('/online_multiplayer');
+                    await Flame.device.setPortrait();
+                  },
+                ),
+                const SizedBox(height: 20),
+                TileButton(
                   titleText: "Play vs Computer",
                   width: isPhone() ? 250 : 350,
                   onTap: () async {
