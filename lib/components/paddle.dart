@@ -11,6 +11,7 @@ class Paddle extends PositionComponent
   Paddle({
     required this.paddleBorderRadius,
     required this.paddleColor,
+    this.draggable = true,
     super.key,
     super.position,
     super.size,
@@ -18,6 +19,7 @@ class Paddle extends PositionComponent
 
   final double paddleBorderRadius;
   final Color paddleColor;
+  bool draggable;
 
   double _previousY = 0;
   double _velocityY = 0;
@@ -52,6 +54,7 @@ class Paddle extends PositionComponent
   @override
   void onDragUpdate(DragUpdateEvent event) {
     super.onDragUpdate(event);
+    if (!draggable) return;
     position.y = (position.y + event.localDelta.y).clamp(
       0,
       game.height - size.y,

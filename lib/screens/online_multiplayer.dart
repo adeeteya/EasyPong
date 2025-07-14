@@ -75,7 +75,9 @@ class _OnlineMultiplayerScreenState
     final roomId = await _lobby!.respondToRequest(fromId, accept);
     if (accept && roomId != null && mounted) {
       await Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => GameApp(roomId: roomId)),
+        MaterialPageRoute(
+          builder: (_) => GameApp(roomId: roomId, isLeftPlayer: false),
+        ),
       );
     }
   }

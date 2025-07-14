@@ -20,11 +20,13 @@ class GameApp extends ConsumerStatefulWidget {
   final bool vsComputer;
   final ComputerDifficulty difficulty;
   final String? roomId;
+  final bool isLeftPlayer;
   const GameApp({
     super.key,
     this.vsComputer = false,
     this.difficulty = ComputerDifficulty.impossible,
     this.roomId,
+    this.isLeftPlayer = true,
   });
 
   @override
@@ -47,6 +49,7 @@ class _GameAppState extends ConsumerState<GameApp> {
         isSfxEnabled: ref.read(settingsProvider).isSfxEnabled,
         gameTheme: ref.read(settingsProvider).getGameTheme(),
         service: MultiplayerService(widget.roomId!),
+        isLeftPlayer: widget.isLeftPlayer,
       );
     } else {
       _game = PongGame(
