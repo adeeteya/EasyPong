@@ -46,6 +46,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '436275011199',
     projectId: 'easy-pong-35665',
     authDomain: 'easy-pong-35665.firebaseapp.com',
+    databaseURL: 'https://easy-pong-35665-default-rtdb.firebaseio.com',
     storageBucket: 'easy-pong-35665.firebasestorage.app',
   );
 
@@ -54,6 +55,7 @@ class DefaultFirebaseOptions {
     appId: '1:436275011199:android:a1f019a5da19b59262294a',
     messagingSenderId: '436275011199',
     projectId: 'easy-pong-35665',
+    databaseURL: 'https://easy-pong-35665-default-rtdb.firebaseio.com',
     storageBucket: 'easy-pong-35665.firebasestorage.app',
   );
 
@@ -62,6 +64,7 @@ class DefaultFirebaseOptions {
     appId: '1:436275011199:ios:66b98ec9292a71ea62294a',
     messagingSenderId: '436275011199',
     projectId: 'easy-pong-35665',
+    databaseURL: 'https://easy-pong-35665-default-rtdb.firebaseio.com',
     storageBucket: 'easy-pong-35665.firebasestorage.app',
     iosBundleId: 'com.adeeteya.easyPong',
   );
@@ -71,6 +74,7 @@ class DefaultFirebaseOptions {
     appId: '1:436275011199:ios:66b98ec9292a71ea62294a',
     messagingSenderId: '436275011199',
     projectId: 'easy-pong-35665',
+    databaseURL: 'https://easy-pong-35665-default-rtdb.firebaseio.com',
     storageBucket: 'easy-pong-35665.firebasestorage.app',
     iosBundleId: 'com.adeeteya.easyPong',
   );
@@ -81,6 +85,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '436275011199',
     projectId: 'easy-pong-35665',
     authDomain: 'easy-pong-35665.firebaseapp.com',
+    databaseURL: 'https://easy-pong-35665-default-rtdb.firebaseio.com',
     storageBucket: 'easy-pong-35665.firebasestorage.app',
   );
 

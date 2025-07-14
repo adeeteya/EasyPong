@@ -42,6 +42,7 @@ class _OnlineMultiplayerScreenState
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Failed to connect to lobby')),
         );
+        Navigator.pop(context);
       }
     }
     if (mounted) setState(() {});
@@ -134,7 +135,7 @@ class _OnlineMultiplayerScreenState
       return const Scaffold(body: Center(child: CircularProgressIndicator()));
     }
     return Scaffold(
-      appBar: AppBar(title: Text('Lobby - $_userId')),
+      appBar: AppBar(title: const Text('Lobby')),
       body: StreamBuilder<List<String>>(
         stream: _lobby!.onlineUsersStream(),
         builder: (context, snapshot) {
