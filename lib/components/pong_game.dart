@@ -6,6 +6,7 @@ import 'package:easy_pong/models/computer_difficulty.dart';
 import 'package:easy_pong/overlays/score_hud.dart';
 import 'package:easy_pong/screens/game_app.dart';
 import 'package:easy_pong/themes/game_theme.dart';
+import 'package:easy_pong/services/multiplayer_service.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -23,6 +24,7 @@ class PongGame extends FlameGame
     required this.gameTheme,
     this.vsComputer = false,
     this.difficulty = ComputerDifficulty.impossible,
+    this.roomId,
   }) : super(children: [ScreenHitbox()]);
 
   final bool isMobile;
@@ -32,6 +34,8 @@ class PongGame extends FlameGame
   final GameTheme gameTheme;
   final bool vsComputer;
   final ComputerDifficulty difficulty;
+  final String? roomId;
+  MultiplayerService? _multiplayer;
   int leftPlayerScore = 0;
   int rightPlayerScore = 0;
   late final Vector2 paddleSize;
@@ -59,6 +63,16 @@ class PongGame extends FlameGame
   @override
   FutureOr<void> onLoad() {
     super.onLoad();
+    if (roomId != null) {
+      _multiplayer = MultiplayerService(roomId!);
+      _multiplayer!.roomStream.listen((event) {
+        final data = event.snapshot.value;
+        if (data is Map) {
+          leftPlayerScore = data['leftScore'] ?? leftPlayerScore;
+          rightPlayerScore = data['rightScore'] ?? rightPlayerScore;
+        }
+      });
+    }
     if (isMobile) {
       width = size[1];
       height = size[0];
@@ -218,6 +232,10 @@ class PongGame extends FlameGame
         }
       }
     }
+    _multiplayer?.updateState({
+      'leftScore': leftPlayerScore,
+      'rightScore': rightPlayerScore,
+    });
   }
 
   void playPing() {

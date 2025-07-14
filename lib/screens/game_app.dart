@@ -17,10 +17,12 @@ enum GameState { welcome, gameOver, playing }
 class GameApp extends ConsumerStatefulWidget {
   final bool vsComputer;
   final ComputerDifficulty difficulty;
+  final String? roomId;
   const GameApp({
     super.key,
     this.vsComputer = false,
     this.difficulty = ComputerDifficulty.impossible,
+    this.roomId,
   });
 
   @override
@@ -40,6 +42,7 @@ class _GameAppState extends ConsumerState<GameApp> {
       gameTheme: ref.read(settingsProvider).getGameTheme(),
       vsComputer: widget.vsComputer,
       difficulty: widget.difficulty,
+      roomId: widget.roomId,
     );
   }
 
