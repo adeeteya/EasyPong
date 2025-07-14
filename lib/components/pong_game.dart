@@ -39,6 +39,8 @@ class PongGame extends FlameGame
   final rand = math.Random();
   double horizontalSafeArea = 0;
 
+  bool _isPaused = false;
+
   late GameState _gameState;
   GameState get gameState => _gameState;
   set gameState(GameState gameState) {
@@ -49,10 +51,15 @@ class PongGame extends FlameGame
         camera.viewport.removeAll(camera.viewport.children.query<ScoreHud>());
         world.removeAll(world.children.query<Paddle>());
         overlays.add(gameState.name);
+        overlays.remove('PauseMenuOverlay');
+        overlays.remove('PauseButtonOverlay');
+        _isPaused = false;
         break;
       case GameState.playing:
         overlays.remove(GameState.welcome.name);
         overlays.remove(GameState.gameOver.name);
+        overlays.remove('PauseMenuOverlay');
+        overlays.add('PauseButtonOverlay');
     }
   }
 
@@ -188,6 +195,10 @@ class PongGame extends FlameGame
     else if (event.logicalKey == LogicalKeyboardKey.enter ||
         event.logicalKey == LogicalKeyboardKey.space) {
       startGame();
+    } else if (event.logicalKey == LogicalKeyboardKey.escape) {
+      if (gameState == GameState.playing) {
+        togglePause();
+      }
     }
     return KeyEventResult.handled;
   }
@@ -279,5 +290,16 @@ class PongGame extends FlameGame
       return;
     }
     addBallToTheWorld(startsWithRightPlayer: true);
+  }
+
+  void togglePause() {
+    if (_isPaused) {
+      resumeEngine();
+      overlays.remove('PauseMenuOverlay');
+    } else {
+      pauseEngine();
+      overlays.add('PauseMenuOverlay');
+    }
+    _isPaused = !_isPaused;
   }
 }

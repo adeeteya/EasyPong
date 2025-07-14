@@ -4,6 +4,8 @@ import 'dart:math' as math;
 import 'package:easy_pong/components/pong_game.dart';
 import 'package:easy_pong/models/computer_difficulty.dart';
 import 'package:easy_pong/notifiers/settings_notifier.dart';
+import 'package:easy_pong/overlays/pause_button_overlay.dart';
+import 'package:easy_pong/overlays/pause_menu_overlay.dart';
 import 'package:easy_pong/overlays/welcome_overlay.dart';
 import 'package:easy_pong/overlays/winner_overlay.dart';
 import 'package:flame/flame.dart';
@@ -116,6 +118,10 @@ class _GameAppState extends ConsumerState<GameApp> {
                         game.gameState = GameState.welcome;
                       },
                     ),
+                'PauseMenuOverlay':
+                    (context, PongGame game) => PauseMenuOverlay(game: game),
+                'PauseButtonOverlay':
+                    (context, PongGame game) => PauseButtonOverlay(game: game),
               },
             );
           },
