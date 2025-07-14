@@ -1,10 +1,11 @@
 import 'dart:async';
+
 import 'package:easy_pong/components/components.dart';
 import 'package:easy_pong/components/pong_game.dart';
 import 'package:easy_pong/online/firebase_game_service.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
-import 'package:firebase_database/firebase_database.dart';
 
 class OnlinePongGame extends PongGame {
   OnlinePongGame({
@@ -20,9 +21,13 @@ class OnlinePongGame extends PongGame {
   StreamSubscription? _sub;
 
   ComponentKey get localKey =>
-      isHost ? ComponentKey.named('RightPaddle') : ComponentKey.named('LeftPaddle');
+      isHost
+          ? ComponentKey.named('RightPaddle')
+          : ComponentKey.named('LeftPaddle');
   ComponentKey get remoteKey =>
-      isHost ? ComponentKey.named('LeftPaddle') : ComponentKey.named('RightPaddle');
+      isHost
+          ? ComponentKey.named('LeftPaddle')
+          : ComponentKey.named('RightPaddle');
 
   @override
   FutureOr<void> onLoad() async {
@@ -64,10 +69,7 @@ class OnlinePongGame extends PongGame {
     if (isHost && gameState == GameState.playing) {
       final b = world.children.query<Ball>().firstOrNull;
       if (b != null) {
-        service.updateBall({
-          'x': b.position.x,
-          'y': b.position.y,
-        });
+        service.updateBall({'x': b.position.x, 'y': b.position.y});
       }
       service.updateScore(leftPlayerScore, rightPlayerScore);
     }

@@ -9,7 +9,8 @@ class OnlineMultiplayerScreen extends StatefulWidget {
   const OnlineMultiplayerScreen({super.key});
 
   @override
-  State<OnlineMultiplayerScreen> createState() => _OnlineMultiplayerScreenState();
+  State<OnlineMultiplayerScreen> createState() =>
+      _OnlineMultiplayerScreenState();
 }
 
 class _OnlineMultiplayerScreenState extends State<OnlineMultiplayerScreen> {
@@ -45,13 +46,18 @@ class _OnlineMultiplayerScreenState extends State<OnlineMultiplayerScreen> {
                   titleText: 'Create Room',
                   width: isPhone() ? 250 : 350,
                   onTap: () async {
-                    final id = roomController.text.isEmpty ? _randomRoom : roomController.text;
+                    final id =
+                        roomController.text.isEmpty
+                            ? _randomRoom
+                            : roomController.text;
                     final service = FirebaseGameService(id, _randomRoom);
                     await service.createRoom();
                     if (context.mounted) {
                       await Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                          builder: (_) => OnlineGameApp(service: service, isHost: true),
+                          builder:
+                              (_) =>
+                                  OnlineGameApp(service: service, isHost: true),
                         ),
                       );
                     }
@@ -69,7 +75,11 @@ class _OnlineMultiplayerScreenState extends State<OnlineMultiplayerScreen> {
                     if (context.mounted) {
                       await Navigator.of(context).pushReplacement(
                         MaterialPageRoute(
-                          builder: (_) => OnlineGameApp(service: service, isHost: false),
+                          builder:
+                              (_) => OnlineGameApp(
+                                service: service,
+                                isHost: false,
+                              ),
                         ),
                       );
                     }

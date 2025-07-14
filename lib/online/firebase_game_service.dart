@@ -15,10 +15,7 @@ class FirebaseGameService {
 
   Future<void> createRoom() async {
     _roomRef = _roomsRef.child(roomId);
-    await _roomRef.set({
-      'host': playerId,
-      'state': 'waiting',
-    });
+    await _roomRef.set({'host': playerId, 'state': 'waiting'});
     await _roomRef.child('host').onDisconnect().remove();
   }
 
