@@ -49,15 +49,13 @@ class ScoreHud extends PositionComponent with HasGameReference<PongGame> {
       anchor: Anchor.topCenter,
       position: Vector2(game.width / 2, 10),
       size: Vector2.all(40),
-      button: _buildPauseButton(game.gameTheme.ballColor,
-          game.gameTheme.backgroundColor),
+      button: _buildPauseButton(
+        game.gameTheme.ballColor,
+        game.gameTheme.backgroundColor,
+      ),
       onPressed: game.togglePause,
     );
-    addAll([
-      _leftPlayerTextComponent,
-      _rightPlayerTextComponent,
-      _pauseButton,
-    ]);
+    addAll([_leftPlayerTextComponent, _rightPlayerTextComponent, _pauseButton]);
   }
 
   @override
