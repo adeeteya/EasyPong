@@ -14,12 +14,22 @@ class PauseMenuOverlay extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           TileButton(
+            titleText: 'Resume Game',
+            width: 200,
+            borderColor: theme.backgroundColor,
+            tileBackgroundColor: theme.ballColor,
+            onTap: () {
+              game.gameState = GameState.playing;
+              game.resumeEngine();
+            },
+          ),
+          const SizedBox(height: 20),
+          TileButton(
             titleText: 'Restart Game',
             width: 200,
             borderColor: theme.backgroundColor,
             tileBackgroundColor: theme.ballColor,
             onTap: () {
-              game.overlays.remove('PauseMenuOverlay');
               game.startGame();
               game.resumeEngine();
             },
