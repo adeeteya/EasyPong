@@ -8,15 +8,13 @@ import 'package:flutter/material.dart';
 
 class Paddle extends PositionComponent
     with DragCallbacks, HasGameReference<PongGame> {
-  Paddle(
-      {required this.paddleBorderRadius,
-      required this.paddleColor,
-      super.key,
-      super.position,
-      super.size})
-      : super(
-          children: [RectangleHitbox()],
-        );
+  Paddle({
+    required this.paddleBorderRadius,
+    required this.paddleColor,
+    super.key,
+    super.position,
+    super.size,
+  }) : super(children: [RectangleHitbox()]);
 
   final double paddleBorderRadius;
   final Color paddleColor;
@@ -54,14 +52,18 @@ class Paddle extends PositionComponent
   @override
   void onDragUpdate(DragUpdateEvent event) {
     super.onDragUpdate(event);
-    position.y =
-        (position.y + event.localDelta.y).clamp(0, game.height - size.y);
+    position.y = (position.y + event.localDelta.y).clamp(
+      0,
+      game.height - size.y,
+    );
   }
 
   void moveBy(double dy) {
-    add(MoveToEffect(
-      Vector2(position.x, (position.y + dy).clamp(0, game.height - size.y)),
-      EffectController(duration: 0.1),
-    ));
+    add(
+      MoveToEffect(
+        Vector2(position.x, (position.y + dy).clamp(0, game.height - size.y)),
+        EffectController(duration: 0.1),
+      ),
+    );
   }
 }

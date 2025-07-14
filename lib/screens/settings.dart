@@ -3,6 +3,7 @@ import 'package:easy_pong/notifiers/settings_notifier.dart';
 import 'package:easy_pong/widgets/tile_button.dart';
 import 'package:easy_pong/widgets/tile_checkbox_button.dart';
 import 'package:easy_pong/widgets/tile_value_button.dart';
+import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -11,6 +12,7 @@ class SettingsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    Flame.device.setPortrait();
     final settingsModel = ref.watch(settingsProvider);
     return Scaffold(
       body: SafeArea(
@@ -35,8 +37,9 @@ class SettingsScreen extends ConsumerWidget {
                   titleText: "Theme",
                   valueText: settingsModel.gameThemeName.toLowerCase(),
                   width: isPhone() ? 250 : 350,
-                  onTap: () =>
-                      ref.read(settingsProvider.notifier).switchGameTheme(),
+                  onTap:
+                      () =>
+                          ref.read(settingsProvider.notifier).switchGameTheme(),
                 ),
                 const SizedBox(height: 20),
                 TileCheckboxButton(

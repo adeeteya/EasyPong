@@ -3,11 +3,11 @@ import 'dart:math' as math;
 
 import 'package:easy_pong/components/multiplayer_pong_game.dart';
 import 'package:easy_pong/components/pong_game.dart';
-import 'package:easy_pong/services/multiplayer_service.dart';
 import 'package:easy_pong/models/computer_difficulty.dart';
 import 'package:easy_pong/notifiers/settings_notifier.dart';
 import 'package:easy_pong/overlays/welcome_overlay.dart';
 import 'package:easy_pong/overlays/winner_overlay.dart';
+import 'package:easy_pong/services/multiplayer_service.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
@@ -38,7 +38,8 @@ class _GameAppState extends ConsumerState<GameApp> {
   void initState() {
     super.initState();
     Flame.device.setLandscape();
-    final isMobilePlatform = (!kIsWeb) && (Platform.isAndroid || Platform.isIOS);
+    final isMobilePlatform =
+        (!kIsWeb) && (Platform.isAndroid || Platform.isIOS);
     final isOnline = widget.roomId != null && !widget.vsComputer;
     if (isOnline) {
       _game = MultiplayerPongGame(

@@ -3,9 +3,8 @@ import 'package:firebase_database/firebase_database.dart';
 
 class MultiplayerService {
   MultiplayerService(this.roomId)
-      : _roomRef = FirebaseDatabase.instance.ref('rooms/$roomId'),
-        _stateRef =
-            FirebaseDatabase.instance.ref('rooms/$roomId/state');
+    : _roomRef = FirebaseDatabase.instance.ref('rooms/$roomId'),
+      _stateRef = FirebaseDatabase.instance.ref('rooms/$roomId/state');
 
   final String roomId;
   final DatabaseReference _roomRef;

@@ -1,5 +1,1 @@
-enum ComputerDifficulty {
-  easy,
-  medium,
-  impossible,
-}
+enum ComputerDifficulty { easy, medium, impossible }

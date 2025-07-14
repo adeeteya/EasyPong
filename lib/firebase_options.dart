@@ -88,5 +88,4 @@ class DefaultFirebaseOptions {
     databaseURL: 'https://easy-pong-35665-default-rtdb.firebaseio.com',
     storageBucket: 'easy-pong-35665.firebasestorage.app',
   );
-
 }

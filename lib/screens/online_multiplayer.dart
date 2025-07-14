@@ -4,6 +4,7 @@ import 'package:easy_pong/screens/game_app.dart';
 import 'package:easy_pong/services/lobby_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -24,6 +25,7 @@ class _OnlineMultiplayerScreenState
   @override
   void initState() {
     super.initState();
+    Flame.device.setPortrait();
     _initLobby();
   }
 
@@ -143,17 +145,16 @@ class _OnlineMultiplayerScreenState
           if (users.isEmpty) {
             return const Center(child: Text('No players online'));
           }
-          return ListView(
-            children: [
-              for (final u in users)
-                ListTile(
-                  title: Text(u),
+          return ListView.builder(
+            itemCount: users.length,
+            itemBuilder:
+                (context, index) => ListTile(
+                  title: Text(users[index]),
                   trailing: ElevatedButton(
-                    onPressed: () => unawaited(_challenge(u)),
+                    onPressed: () => unawaited(_challenge(users[index])),
                     child: const Text('Challenge'),
                   ),
                 ),
-            ],
           );
         },
       ),
