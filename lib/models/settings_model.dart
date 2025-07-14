@@ -7,7 +7,7 @@ enum GameThemeNames {
   matrix,
   brownBg,
   yellowBg,
-  inverted
+  inverted,
 }
 
 class SettingsModel {

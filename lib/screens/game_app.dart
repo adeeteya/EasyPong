@@ -1,11 +1,13 @@
 import 'dart:io';
 import 'dart:math' as math;
 
+import 'package:easy_pong/components/multiplayer_pong_game.dart';
 import 'package:easy_pong/components/pong_game.dart';
 import 'package:easy_pong/models/computer_difficulty.dart';
 import 'package:easy_pong/notifiers/settings_notifier.dart';
 import 'package:easy_pong/overlays/welcome_overlay.dart';
 import 'package:easy_pong/overlays/winner_overlay.dart';
+import 'package:easy_pong/services/multiplayer_service.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
@@ -17,10 +19,14 @@ enum GameState { welcome, gameOver, playing }
 class GameApp extends ConsumerStatefulWidget {
   final bool vsComputer;
   final ComputerDifficulty difficulty;
+  final String? roomId;
+  final bool isLeftPlayer;
   const GameApp({
     super.key,
     this.vsComputer = false,
     this.difficulty = ComputerDifficulty.impossible,
+    this.roomId,
+    this.isLeftPlayer = true,
   });
 
   @override
@@ -34,13 +40,27 @@ class _GameAppState extends ConsumerState<GameApp> {
   void initState() {
     super.initState();
     Flame.device.setLandscape();
-    _game = PongGame(
-      isMobile: (!kIsWeb) && (Platform.isAndroid || Platform.isIOS),
-      isSfxEnabled: ref.read(settingsProvider).isSfxEnabled,
-      gameTheme: ref.read(settingsProvider).getGameTheme(),
-      vsComputer: widget.vsComputer,
-      difficulty: widget.difficulty,
-    );
+    final isMobilePlatform =
+        (!kIsWeb) && (Platform.isAndroid || Platform.isIOS);
+    final isOnline = widget.roomId != null && !widget.vsComputer;
+    if (isOnline) {
+      _game = MultiplayerPongGame(
+        isMobile: isMobilePlatform,
+        isSfxEnabled: ref.read(settingsProvider).isSfxEnabled,
+        gameTheme: ref.read(settingsProvider).getGameTheme(),
+        service: MultiplayerService(widget.roomId!),
+        isLeftPlayer: widget.isLeftPlayer,
+      );
+    } else {
+      _game = PongGame(
+        isMobile: isMobilePlatform,
+        isSfxEnabled: ref.read(settingsProvider).isSfxEnabled,
+        gameTheme: ref.read(settingsProvider).getGameTheme(),
+        vsComputer: widget.vsComputer,
+        difficulty: widget.difficulty,
+        roomId: widget.roomId,
+      );
+    }
   }
 
   Future<bool> _onWillPop() async {

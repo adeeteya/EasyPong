@@ -25,7 +25,10 @@ class Ball extends PositionComponent
   void render(Canvas canvas) {
     if (isBallRound) {
       canvas.drawCircle(
-          Offset(size.x / 2, size.x / 2), size.x / 2, color.filledPaint());
+        Offset(size.x / 2, size.x / 2),
+        size.x / 2,
+        color.filledPaint(),
+      );
     } else {
       canvas.drawRect(Offset.zero & size.toSize(), color.filledPaint());
     }
@@ -48,7 +51,9 @@ class Ball extends PositionComponent
 
   @override
   void onCollisionStart(
-      Set<Vector2> intersectionPoints, PositionComponent other) {
+    Set<Vector2> intersectionPoints,
+    PositionComponent other,
+  ) {
     super.onCollisionStart(intersectionPoints, other);
     if (other is ScreenHitbox) {
       final speed = velocity.length;
@@ -61,24 +66,34 @@ class Ball extends PositionComponent
         velocity.setFrom(velocity.normalized()..scale(speed));
         game.playPing();
       } else if (intersectionPoints.first.x <= 0) {
-        add(RemoveEffect(
+        add(
+          RemoveEffect(
             delay: 1,
             onComplete: () {
               game.rightPlayerPointWin();
-            }));
+            },
+          ),
+        );
       } else if (intersectionPoints.first.x >= game.width - 0.2) {
-        add(RemoveEffect(
+        add(
+          RemoveEffect(
             delay: 1,
             onComplete: () {
               game.leftPlayerPointWin();
-            }));
+            },
+          ),
+        );
       }
     } else if (other is Paddle) {
       final speed = velocity.length;
       velocity.x = -velocity.x;
-      final impact =
-          ((position.y - other.position.y) / other.size.y).clamp(-0.5, 0.5);
-      velocity.y = velocity.y + impact * game.height * 0.3 +
+      final impact = ((position.y - other.position.y) / other.size.y).clamp(
+        -0.5,
+        0.5,
+      );
+      velocity.y =
+          velocity.y +
+          impact * game.height * 0.3 +
           other.verticalVelocity * 0.05;
       velocity.setFrom(velocity.normalized()..scale(speed));
       game.playPing();

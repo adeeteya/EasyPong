@@ -22,6 +22,7 @@ class ComputerDifficultyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    Flame.device.setPortrait();
     return Scaffold(
       body: SafeArea(
         child: Center(

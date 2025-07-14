@@ -4,6 +4,8 @@
 
 list(APPEND FLUTTER_PLUGIN_LIST
   audioplayers_windows
+  firebase_auth
+  firebase_core
   screen_retriever_windows
   window_manager
 )

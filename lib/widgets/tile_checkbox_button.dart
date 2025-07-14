@@ -11,14 +11,15 @@ class TileCheckboxButton extends ConsumerWidget {
   final double width;
   final double height;
   final Color? tileBackgroundColor;
-  const TileCheckboxButton(
-      {super.key,
-      required this.titleText,
-      required this.onTap,
-      this.width = 350,
-      this.height = 60,
-      this.tileBackgroundColor,
-      this.isChecked = false});
+  const TileCheckboxButton({
+    super.key,
+    required this.titleText,
+    required this.onTap,
+    this.width = 350,
+    this.height = 60,
+    this.tileBackgroundColor,
+    this.isChecked = false,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -43,17 +44,19 @@ class TileCheckboxButton extends ConsumerWidget {
               Text(
                 titleText,
                 textAlign: TextAlign.center,
-                style: (width <= 250)
-                    ? Theme.of(context).textTheme.bodySmall
-                    : Theme.of(context).textTheme.titleMedium,
+                style:
+                    (width <= 250)
+                        ? Theme.of(context).textTheme.bodySmall
+                        : Theme.of(context).textTheme.titleMedium,
               ),
               const Spacer(),
               Text(
                 isChecked ? "<on>" : "<off>",
                 textAlign: TextAlign.center,
-                style: (width <= 250)
-                    ? Theme.of(context).textTheme.bodySmall
-                    : Theme.of(context).textTheme.titleMedium,
+                style:
+                    (width <= 250)
+                        ? Theme.of(context).textTheme.bodySmall
+                        : Theme.of(context).textTheme.titleMedium,
               ).animate(key: ValueKey(isChecked)).fade(duration: 300.ms),
               const SizedBox(width: 8),
             ],

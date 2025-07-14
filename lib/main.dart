@@ -1,8 +1,11 @@
 import 'dart:io';
 
+import 'package:easy_pong/firebase_options.dart';
 import 'package:easy_pong/models/computer_difficulty.dart';
 import 'package:easy_pong/notifiers/settings_notifier.dart';
+import 'package:easy_pong/screens/online_multiplayer.dart';
 import 'package:easy_pong/screens/screens.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/foundation.dart';
@@ -13,6 +16,7 @@ import 'package:window_manager/window_manager.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   if (!kIsWeb) {
     await FlameAudio.audioCache.load('ping.mp3');
     if (Platform.isWindows || Platform.isLinux || Platform.isMacOS) {
@@ -56,6 +60,7 @@ class EasyPongApp extends StatelessWidget {
       routes: {
         '/': (context) => const HomeScreen(),
         '/local_multiplayer': (context) => const GameApp(),
+        '/online_multiplayer': (context) => const OnlineMultiplayerScreen(),
         '/computer_difficulty': (context) => const ComputerDifficultyScreen(),
         '/vs_computer': (context) {
           final difficulty =
