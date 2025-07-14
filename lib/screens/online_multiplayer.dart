@@ -1,9 +1,8 @@
 import 'dart:async';
-import 'dart:math';
 
-import 'package:easy_pong/notifiers/settings_notifier.dart';
 import 'package:easy_pong/screens/game_app.dart';
 import 'package:easy_pong/services/lobby_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -29,14 +28,22 @@ class _OnlineMultiplayerScreenState
   }
 
   Future<void> _initLobby() async {
-    final prefs = ref.read(sharedPreferencesProvider);
-    _userId =
-        prefs.getString('userId') ??
-        '${DateTime.now().millisecondsSinceEpoch}-${Random().nextInt(1000)}';
-    await prefs.setString('userId', _userId);
-    _lobby = LobbyService(_userId);
-    await _lobby!.init();
-    _requestSub = _lobby!.incomingRequests.listen(_onRequest);
+    try {
+      final auth = FirebaseAuth.instance;
+      User? user = auth.currentUser;
+      user ??= (await auth.signInAnonymously()).user;
+      _userId = user!.uid;
+      _lobby = LobbyService(_userId);
+      await _lobby!.init();
+      _requestSub = _lobby!.incomingRequests.listen(_onRequest);
+    } catch (e) {
+      debugPrint('Lobby initialization failed: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to connect to lobby')),
+        );
+      }
+    }
     if (mounted) setState(() {});
   }
 
