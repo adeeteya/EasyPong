@@ -120,6 +120,7 @@ class PongGame extends FlameGame
         paddleColor: gameTheme.leftPaddleColor,
         position: Vector2(horizontalSafeArea, height / 2),
         size: paddleSize,
+        isDragCallbackEnabled: !vsComputer,
       ),
     );
 
