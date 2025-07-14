@@ -52,20 +52,17 @@ class PongGame extends FlameGame
         world.removeAll(world.children.query<Paddle>());
         overlays.add(gameState.name);
         overlays.remove(GameState.paused.name);
-        overlays.remove('PauseButtonOverlay');
         _isPaused = false;
         break;
       case GameState.playing:
         overlays.remove(GameState.welcome.name);
         overlays.remove(GameState.gameOver.name);
         overlays.remove(GameState.paused.name);
-        overlays.add('PauseButtonOverlay');
         break;
       case GameState.paused:
         overlays.add(GameState.paused.name);
         overlays.remove(GameState.welcome.name);
         overlays.remove(GameState.gameOver.name);
-        overlays.remove('PauseButtonOverlay');
         break;
     }
   }
