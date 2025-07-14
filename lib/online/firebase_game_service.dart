@@ -50,4 +50,8 @@ class FirebaseGameService {
   Future<void> dispose() async {
     await _sub?.cancel();
   }
+
+  Future<void> deleteRoom() async {
+    await _roomRef.remove();
+  }
 }
