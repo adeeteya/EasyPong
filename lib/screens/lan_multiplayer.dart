@@ -48,17 +48,27 @@ class _LanMultiplayerScreenState extends State<LanMultiplayerScreen> {
     final ip = _ipController.text;
     if (ip.isEmpty) return;
     _service = LanService.client();
-    await _service!.connect(ip);
-    _service!.send({'type': 'hello'});
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(
-        builder: (_) => GameApp(
-          lanService: _service,
-          isHost: false,
+    try {
+      await _service!.connect(ip);
+      _service!.send({'type': 'hello'});
+      if (!mounted) return;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (_) => GameApp(
+            lanService: _service,
+            isHost: false,
+          ),
         ),
-      ),
-    );
+      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Connection failed: $e')),
+        );
+      }
+      _service?.dispose();
+    }
   }
 
   @override

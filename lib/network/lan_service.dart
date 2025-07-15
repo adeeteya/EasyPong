@@ -24,8 +24,14 @@ class LanService {
   }
 
   Future<void> connect(String host) async {
-    _socket = await Socket.connect(host, port);
-    _socket!.listen(_onData, onDone: _onDone, onError: (_) => _onDone());
+    try {
+      _socket =
+          await Socket.connect(host, port).timeout(const Duration(seconds: 5));
+      _socket!.listen(_onData, onDone: _onDone, onError: (_) => _onDone());
+    } catch (e) {
+      _controller.addError(e);
+      rethrow;
+    }
   }
 
   void send(Map<String, dynamic> data) {
