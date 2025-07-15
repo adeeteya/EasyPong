@@ -7,6 +7,7 @@ import 'package:easy_pong/notifiers/settings_notifier.dart';
 import 'package:easy_pong/overlays/pause_menu_overlay.dart';
 import 'package:easy_pong/overlays/welcome_overlay.dart';
 import 'package:easy_pong/overlays/winner_overlay.dart';
+import 'package:easy_pong/network/lan_service.dart';
 import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
@@ -18,10 +19,14 @@ enum GameState { welcome, gameOver, playing, paused }
 class GameApp extends ConsumerStatefulWidget {
   final bool vsComputer;
   final ComputerDifficulty difficulty;
+  final LanService? lanService;
+  final bool isHost;
   const GameApp({
     super.key,
     this.vsComputer = false,
     this.difficulty = ComputerDifficulty.impossible,
+    this.lanService,
+    this.isHost = false,
   });
 
   @override
@@ -41,6 +46,8 @@ class _GameAppState extends ConsumerState<GameApp> {
       gameTheme: ref.read(settingsProvider).getGameTheme(),
       vsComputer: widget.vsComputer,
       difficulty: widget.difficulty,
+      lanService: widget.lanService,
+      isHost: widget.isHost,
     );
   }
 
@@ -48,6 +55,7 @@ class _GameAppState extends ConsumerState<GameApp> {
   void dispose() {
     _game.pauseEngine();
     _game.overlays.clear();
+    widget.lanService?.dispose();
     super.dispose();
   }
 
@@ -76,6 +84,7 @@ class _GameAppState extends ConsumerState<GameApp> {
         _game.resumeEngine();
         return false;
       }
+      widget.lanService?.send({'type': 'quit'});
       return true;
     }
     return true;
@@ -117,8 +126,9 @@ class _GameAppState extends ConsumerState<GameApp> {
                         game.gameState = GameState.welcome;
                       },
                     ),
-                GameState.paused.name:
-                    (context, PongGame game) => PauseMenuOverlay(game: game),
+                if (widget.lanService == null)
+                  GameState.paused.name:
+                      (context, PongGame game) => PauseMenuOverlay(game: game),
               },
             );
           },

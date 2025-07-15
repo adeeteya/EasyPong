@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:easy_pong/models/computer_difficulty.dart';
 import 'package:easy_pong/notifiers/settings_notifier.dart';
 import 'package:easy_pong/screens/screens.dart';
+import 'package:easy_pong/screens/lan_multiplayer.dart';
 import 'package:flame/flame.dart';
 import 'package:flame_audio/flame_audio.dart';
 import 'package:flutter/foundation.dart';
@@ -56,6 +57,7 @@ class EasyPongApp extends StatelessWidget {
       routes: {
         '/': (context) => const HomeScreen(),
         '/local_multiplayer': (context) => const GameApp(),
+        '/lan_multiplayer': (context) => const LanMultiplayerScreen(),
         '/computer_difficulty': (context) => const ComputerDifficultyScreen(),
         '/vs_computer': (context) {
           final difficulty =
