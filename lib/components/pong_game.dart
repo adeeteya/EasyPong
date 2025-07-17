@@ -3,6 +3,8 @@ import 'dart:math' as math;
 
 import 'package:easy_pong/components/components.dart';
 import 'package:easy_pong/models/computer_difficulty.dart';
+import 'package:easy_pong/models/network_message.dart';
+import 'package:easy_pong/network/lan_service.dart';
 import 'package:easy_pong/overlays/score_hud.dart';
 import 'package:easy_pong/screens/game_app.dart';
 import 'package:easy_pong/themes/game_theme.dart';
@@ -23,6 +25,8 @@ class PongGame extends FlameGame
     required this.gameTheme,
     this.vsComputer = false,
     this.difficulty = ComputerDifficulty.impossible,
+    this.lanService,
+    this.isHost = false,
   }) : super(children: [ScreenHitbox()]);
 
   final bool isMobile;
@@ -32,12 +36,16 @@ class PongGame extends FlameGame
   final GameTheme gameTheme;
   final bool vsComputer;
   final ComputerDifficulty difficulty;
+  final LanService? lanService;
+  final bool isHost;
   int leftPlayerScore = 0;
   int rightPlayerScore = 0;
   late final Vector2 paddleSize;
   late final double paddleStep;
   final rand = math.Random();
   double horizontalSafeArea = 0;
+
+  GameStateMessage? _pendingState;
 
   bool _isPaused = false;
 
@@ -92,6 +100,17 @@ class PongGame extends FlameGame
     paddleSize = Vector2(width * 0.02, height * 0.2);
     paddleStep = height * 0.05;
     gameState = GameState.welcome;
+    lanService?.start();
+    lanService?.messages.listen((data) {
+      if (data['type'] == 'state') {
+        _pendingState = GameStateMessage.fromJson(data);
+      } else if (data['type'] == 'input' && isHost) {
+        final input = PaddleInput.fromJson(data);
+        findByKey<Paddle>(ComponentKey.named('RightPaddle'))?.moveBy(input.dy);
+      } else if (data['type'] == 'start' && !isHost) {
+        startGame();
+      }
+    });
   }
 
   @override
@@ -109,6 +128,7 @@ class PongGame extends FlameGame
 
     //set game to playing state
     gameState = GameState.playing;
+    lanService?.send({'type': 'start'});
 
     //initialize both player scores to zero
     leftPlayerScore = 0;
@@ -157,6 +177,7 @@ class PongGame extends FlameGame
   void onTap() {
     super.onTap();
     if (gameState == GameState.welcome) {
+      if (lanService != null && !isHost) return;
       startGame();
     }
   }
@@ -164,7 +185,19 @@ class PongGame extends FlameGame
   @override
   void onDragUpdate(DragUpdateEvent event) {
     super.onDragUpdate(event);
-    if (!vsComputer && event.canvasStartPosition.x < width / 2) {
+    if (lanService != null) {
+      if (isHost) {
+        findByKey<Paddle>(
+          ComponentKey.named('LeftPaddle'),
+        )?.moveBy(event.localDelta.y * 2);
+        lanService!.send({'type': 'input', 'dy': event.localDelta.y * 2});
+      } else {
+        findByKey<Paddle>(
+          ComponentKey.named('RightPaddle'),
+        )?.moveBy(event.localDelta.y * 2);
+        lanService!.send({'type': 'input', 'dy': event.localDelta.y * 2});
+      }
+    } else if (!vsComputer && event.canvasStartPosition.x < width / 2) {
       // Move the left paddle only when playing local multiplayer
       findByKey<Paddle>(
         ComponentKey.named('LeftPaddle'),
@@ -184,10 +217,42 @@ class PongGame extends FlameGame
   ) {
     super.onKeyEvent(event, keysPressed);
     // Move the right paddle (player) using arrow keys
-    if (keysPressed.contains(LogicalKeyboardKey.arrowUp)) {
-      findByKey<Paddle>(ComponentKey.named('RightPaddle'))?.moveBy(-paddleStep);
-    } else if (keysPressed.contains(LogicalKeyboardKey.arrowDown)) {
-      findByKey<Paddle>(ComponentKey.named('RightPaddle'))?.moveBy(paddleStep);
+    if (lanService != null) {
+      if (keysPressed.contains(LogicalKeyboardKey.arrowUp)) {
+        if (isHost) {
+          lanService!.send({'type': 'input', 'dy': -paddleStep});
+          findByKey<Paddle>(
+            ComponentKey.named('LeftPaddle'),
+          )?.moveBy(-paddleStep);
+        } else {
+          lanService!.send({'type': 'input', 'dy': -paddleStep});
+          findByKey<Paddle>(
+            ComponentKey.named('RightPaddle'),
+          )?.moveBy(-paddleStep);
+        }
+      } else if (keysPressed.contains(LogicalKeyboardKey.arrowDown)) {
+        if (isHost) {
+          lanService!.send({'type': 'input', 'dy': paddleStep});
+          findByKey<Paddle>(
+            ComponentKey.named('LeftPaddle'),
+          )?.moveBy(paddleStep);
+        } else {
+          lanService!.send({'type': 'input', 'dy': paddleStep});
+          findByKey<Paddle>(
+            ComponentKey.named('RightPaddle'),
+          )?.moveBy(paddleStep);
+        }
+      }
+    } else {
+      if (keysPressed.contains(LogicalKeyboardKey.arrowUp)) {
+        findByKey<Paddle>(
+          ComponentKey.named('RightPaddle'),
+        )?.moveBy(-paddleStep);
+      } else if (keysPressed.contains(LogicalKeyboardKey.arrowDown)) {
+        findByKey<Paddle>(
+          ComponentKey.named('RightPaddle'),
+        )?.moveBy(paddleStep);
+      }
     }
     // Move the left paddle only in local multiplayer mode
     if (!vsComputer && keysPressed.contains(LogicalKeyboardKey.keyW)) {
@@ -198,6 +263,9 @@ class PongGame extends FlameGame
     //To start the game in devices connected to the keyboard
     else if (event.logicalKey == LogicalKeyboardKey.enter ||
         event.logicalKey == LogicalKeyboardKey.space) {
+      if (lanService != null && !isHost) {
+        return KeyEventResult.handled;
+      }
       startGame();
     } else if (event.logicalKey == LogicalKeyboardKey.escape) {
       if (gameState == GameState.playing) {
@@ -210,6 +278,41 @@ class PongGame extends FlameGame
   @override
   void update(double dt) {
     super.update(dt);
+    if (lanService != null && !isHost && _pendingState != null) {
+      final state = _pendingState!;
+      findByKey<Paddle>(ComponentKey.named('LeftPaddle'))?.position.y =
+          state.leftPaddleY;
+      findByKey<Paddle>(ComponentKey.named('RightPaddle'))?.position.y =
+          state.rightPaddleY;
+      final balls = world.children.query<Ball>();
+      if (balls.isNotEmpty) {
+        balls.first.position = Vector2(state.ballX, state.ballY);
+      }
+      leftPlayerScore = state.leftScore;
+      rightPlayerScore = state.rightScore;
+      _pendingState = null;
+      return;
+    }
+
+    if (lanService != null && isHost && gameState == GameState.playing) {
+      lanService!.send({
+        'type': 'state',
+        ...GameStateMessage(
+          leftPaddleY:
+              findByKey<Paddle>(ComponentKey.named('LeftPaddle'))?.position.y ??
+              0,
+          rightPaddleY:
+              findByKey<Paddle>(
+                ComponentKey.named('RightPaddle'),
+              )?.position.y ??
+              0,
+          ballX: world.children.query<Ball>().first.position.x,
+          ballY: world.children.query<Ball>().first.position.y,
+          leftScore: leftPlayerScore,
+          rightScore: rightPlayerScore,
+        ).toJson(),
+      });
+    }
     if (vsComputer && gameState == GameState.playing) {
       // Computer controls the left paddle in vs computer mode
       final aiPaddle = findByKey<Paddle>(ComponentKey.named('LeftPaddle'));

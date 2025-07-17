@@ -56,6 +56,7 @@ class EasyPongApp extends StatelessWidget {
       routes: {
         '/': (context) => const HomeScreen(),
         '/local_multiplayer': (context) => const GameApp(),
+        '/lan_multiplayer': (context) => const LanMenuScreen(),
         '/computer_difficulty': (context) => const ComputerDifficultyScreen(),
         '/vs_computer': (context) {
           final difficulty =
