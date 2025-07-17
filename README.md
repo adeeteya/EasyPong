@@ -18,6 +18,7 @@ If you like what you see, please ⭐ the repo.
 ## ✨ Features
 
 - 🧑‍🤝‍🧑 Ability to play Local Multiplayer (1v1)
+- 🌐 1v1 LAN Multiplayer Mode
 - 🎮 Play Against The Computer
 - 🕹️ Supported By The Keyboard as well as the Joystick
 - 🎨 Ability To Select From Multiple Different Themes (eq:- classic, football, matrix)

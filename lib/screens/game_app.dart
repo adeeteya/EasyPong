@@ -3,6 +3,7 @@ import 'dart:math' as math;
 
 import 'package:easy_pong/components/pong_game.dart';
 import 'package:easy_pong/models/computer_difficulty.dart';
+import 'package:easy_pong/network/lan_service.dart';
 import 'package:easy_pong/notifiers/settings_notifier.dart';
 import 'package:easy_pong/overlays/pause_menu_overlay.dart';
 import 'package:easy_pong/overlays/welcome_overlay.dart';
@@ -18,10 +19,14 @@ enum GameState { welcome, gameOver, playing, paused }
 class GameApp extends ConsumerStatefulWidget {
   final bool vsComputer;
   final ComputerDifficulty difficulty;
+  final LanService? lanService;
+  final bool isHost;
   const GameApp({
     super.key,
     this.vsComputer = false,
     this.difficulty = ComputerDifficulty.impossible,
+    this.lanService,
+    this.isHost = false,
   });
 
   @override
@@ -41,6 +46,8 @@ class _GameAppState extends ConsumerState<GameApp> {
       gameTheme: ref.read(settingsProvider).getGameTheme(),
       vsComputer: widget.vsComputer,
       difficulty: widget.difficulty,
+      lanService: widget.lanService,
+      isHost: widget.isHost,
     );
   }
 
