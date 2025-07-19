@@ -10,14 +10,15 @@ class TileButton extends ConsumerWidget {
   final double height;
   final Color? tileBackgroundColor;
   final Color borderColor;
-  const TileButton(
-      {super.key,
-      required this.titleText,
-      required this.onTap,
-      this.width = 350,
-      this.height = 60,
-      this.tileBackgroundColor,
-      this.borderColor = Colors.white});
+  const TileButton({
+    super.key,
+    required this.titleText,
+    required this.onTap,
+    this.width = 350,
+    this.height = 60,
+    this.tileBackgroundColor,
+    this.borderColor = Colors.white,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -40,15 +41,14 @@ class TileButton extends ConsumerWidget {
             child: Text(
               titleText,
               textAlign: TextAlign.center,
-              style: (width <= 250)
-                  ? Theme.of(context)
-                      .textTheme
-                      .bodySmall
-                      ?.copyWith(color: borderColor)
-                  : Theme.of(context)
-                      .textTheme
-                      .titleMedium
-                      ?.copyWith(color: borderColor),
+              style:
+                  (width <= 250)
+                      ? Theme.of(
+                        context,
+                      ).textTheme.bodySmall?.copyWith(color: borderColor)
+                      : Theme.of(
+                        context,
+                      ).textTheme.titleMedium?.copyWith(color: borderColor),
             ),
           ),
         ),

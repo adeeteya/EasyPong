@@ -1,8 +1,9 @@
+import 'dart:io';
+
 import 'package:easy_pong/functions.dart';
 import 'package:easy_pong/widgets/tile_button.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
-import 'dart:io';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});

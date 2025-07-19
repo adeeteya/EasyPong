@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:easy_pong/p2p/p2p_manager.dart';
 import 'package:easy_pong/screens/real_time_game_app.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +37,7 @@ class _RealTimeConnectionScreenState extends State<RealTimeConnectionScreen> {
     };
     manager!.messages.listen((event) {});
     manager!.clientListStream?.listen((clients) {
-      if (clients.isNotEmpty) {
+      if (clients.isNotEmpty && mounted) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
             builder:
@@ -52,26 +54,35 @@ class _RealTimeConnectionScreenState extends State<RealTimeConnectionScreen> {
     setState(() {
       joining = true;
     });
-    manager!.startScan((list) {
-      setState(() {
-        devices = list;
-      });
-    });
+    unawaited(
+      manager!.startScan((list) {
+        setState(() {
+          devices = list;
+        });
+      }),
+    );
   }
 
-  void _connect(BleDiscoveredDevice device) async {
+  Future<void> _connect(BleDiscoveredDevice device) async {
     await manager!.connectDevice(device);
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(
-        builder: (context) => RealTimeGameApp(manager: manager!, isHost: false),
-      ),
-    );
+    if (mounted) {
+      unawaited(
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder:
+                (context) => RealTimeGameApp(manager: manager!, isHost: false),
+          ),
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     if (hosting) {
-      return Scaffold(body: Center(child: Text('Waiting for opponent...')));
+      return const Scaffold(
+        body: Center(child: Text('Waiting for opponent...')),
+      );
     }
     if (joining) {
       return Scaffold(
@@ -81,7 +92,7 @@ class _RealTimeConnectionScreenState extends State<RealTimeConnectionScreen> {
           itemBuilder: (context, index) {
             final d = devices[index];
             return ListTile(
-              title: Text(d.deviceName ?? 'Unknown'),
+              title: Text(d.deviceName),
               onTap: () => _connect(d),
             );
           },

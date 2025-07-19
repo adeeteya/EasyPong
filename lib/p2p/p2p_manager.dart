@@ -40,7 +40,7 @@ class P2pManager {
 
   Future<void> createGroup() async {
     if (isHost) {
-      await _host?.createGroup(advertise: true);
+      await _host?.createGroup();
     }
   }
 
