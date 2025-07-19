@@ -19,6 +19,16 @@ class _RealTimeConnectionScreenState extends State<RealTimeConnectionScreen> {
   bool hosting = false;
   bool joining = false;
 
+  Future<bool> _requestPermissions() async {
+    final granted = await P2pManager.ensurePermissions();
+    if (!granted && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Required permissions not granted.')),
+      );
+    }
+    return granted;
+  }
+
   @override
   void dispose() {
     manager?.dispose();
@@ -26,6 +36,7 @@ class _RealTimeConnectionScreenState extends State<RealTimeConnectionScreen> {
   }
 
   Future<void> _hostGame() async {
+    if (!await _requestPermissions()) return;
     manager = P2pManager.host();
     await manager!.initialize();
     await manager!.createGroup();
@@ -49,6 +60,7 @@ class _RealTimeConnectionScreenState extends State<RealTimeConnectionScreen> {
   }
 
   Future<void> _joinGame() async {
+    if (!await _requestPermissions()) return;
     manager = P2pManager.client();
     await manager!.initialize();
     setState(() {
