@@ -39,12 +39,13 @@ class _LanMenuScreenState extends State<LanMenuScreen> {
   Future<void> _joinGame() async {
     final service = LanService.client();
     setState(() => _status = 'Searching...');
+    await service.start();
     final host = await service.discoverHost();
     if (host == null) {
       setState(() => _status = 'No host found');
+      service.dispose();
       return;
     }
-    await service.start();
     service.send({'type': 'start'});
     if (!mounted) return;
     await Navigator.of(context).pushReplacement(

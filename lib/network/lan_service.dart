@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
+
+import 'package:lan_mixed/lan_mixed.dart';
 
 enum LanRole { host, client }
 
@@ -11,87 +12,57 @@ class LanService {
   final LanRole role;
   final int port;
 
-  RawDatagramSocket? _socket;
-  InternetAddress? _peerAddress;
-
+  final LanMixed _lanMixed = LanMixed();
   final _controller = StreamController<Map<String, dynamic>>.broadcast();
   Stream<Map<String, dynamic>> get messages => _controller.stream;
 
-  static const discoveryPort = 42123;
-  static const discoveryMessage = 'EASY_PONG_DISCOVER';
-  static const discoveryResponse = 'EASY_PONG_FOUND';
+  List<DeviceEntity> _devices = [];
 
   Future<void> start() async {
-    _socket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, port);
-    _socket!.listen(_onEvent);
-    if (role == LanRole.host) {
-      _socket!.broadcastEnabled = true;
-    }
-  }
-
-  void _onEvent(RawSocketEvent event) {
-    if (event == RawSocketEvent.read) {
-      final dg = _socket!.receive();
-      if (dg == null) return;
-      final msg = utf8.decode(dg.data);
-      if (role == LanRole.host && msg == discoveryMessage) {
-        _socket!.send(
-          utf8.encode(discoveryResponse),
-          dg.address,
-          discoveryPort,
-        );
-      } else {
-        _peerAddress ??= dg.address;
-        try {
-          final decoded = jsonDecode(msg) as Map<String, dynamic>;
-          _controller.add(decoded);
-        } catch (_) {
-          // ignore malformed packet
+    _lanMixed.startService(
+      port: port,
+      onReceiveMsg: (msg) {
+        if (msg.data != null) {
+          try {
+            final decoded = jsonDecode(msg.data!) as Map<String, dynamic>;
+            _controller.add(decoded);
+          } catch (_) {
+            // ignore malformed packet
+          }
         }
-      }
-    }
-  }
-
-  Future<InternetAddress?> discoverHost({
-    Duration timeout = const Duration(seconds: 3),
-  }) async {
-    final socket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, 0);
-    socket.broadcastEnabled = true;
-    final completer = Completer<InternetAddress?>();
-    Timer? timer;
-    timer = Timer(timeout, () {
-      socket.close();
-      if (!completer.isCompleted) completer.complete(null);
-    });
-    socket.listen((event) {
-      if (event == RawSocketEvent.read) {
-        final dg = socket.receive();
-        if (dg == null) return;
-        final msg = utf8.decode(dg.data);
-        if (msg == discoveryResponse) {
-          timer?.cancel();
-          socket.close();
-          if (!completer.isCompleted) completer.complete(dg.address);
-        }
-      }
-    });
-    socket.send(
-      utf8.encode(discoveryMessage),
-      InternetAddress('255.255.255.255'),
-      discoveryPort,
+      },
+      onDevicesChange: (devices) {
+        _devices = devices;
+      },
     );
+    // Ensure we know about devices on startup
+    _lanMixed.refreshDevices();
+  }
+
+  Future<String?> discoverHost({Duration timeout = const Duration(seconds: 3)}) async {
+    final completer = Completer<String?>();
+    final start = DateTime.now();
+    Timer.periodic(const Duration(milliseconds: 100), (timer) {
+      if (_devices.isNotEmpty) {
+        timer.cancel();
+        if (!completer.isCompleted) {
+          completer.complete(_devices.first.deviceIp);
+        }
+      } else if (DateTime.now().difference(start) >= timeout) {
+        timer.cancel();
+        if (!completer.isCompleted) completer.complete(null);
+      }
+    });
+    _lanMixed.refreshDevices();
     return completer.future;
   }
 
   void send(Map<String, dynamic> data) {
-    if (_peerAddress != null && _socket != null) {
-      final bytes = utf8.encode(jsonEncode(data));
-      _socket!.send(bytes, _peerAddress!, port);
-    }
+    _lanMixed.sendMessage(jsonEncode(data));
   }
 
   void dispose() {
-    _socket?.close();
+    _lanMixed.close();
     _controller.close();
   }
 }
