@@ -17,6 +17,7 @@ dependencies:
   flutter_riverpod: ^2.6.1
   shared_preferences: ^2.5.3
   window_manager: ^0.5.1
+  flutter_p2p_connection: ^3.0.2
 
 dev_dependencies:
   flutter_lints: ^6.0.0

@@ -23,6 +23,7 @@ class PongGame extends FlameGame
     required this.gameTheme,
     this.vsComputer = false,
     this.difficulty = ComputerDifficulty.impossible,
+    this.allowPause = true,
   }) : super(children: [ScreenHitbox()]);
 
   final bool isMobile;
@@ -32,6 +33,7 @@ class PongGame extends FlameGame
   final GameTheme gameTheme;
   final bool vsComputer;
   final ComputerDifficulty difficulty;
+  final bool allowPause;
   int leftPlayerScore = 0;
   int rightPlayerScore = 0;
   late final Vector2 paddleSize;
@@ -120,6 +122,7 @@ class PongGame extends FlameGame
         leftHudTextColor: gameTheme.leftHudTextColor,
         rightHudTextColor: gameTheme.rightHudTextColor,
         fontFamily: gameTheme.hudFontFamily,
+        showPauseButton: allowPause,
       ),
     );
 
@@ -200,7 +203,7 @@ class PongGame extends FlameGame
         event.logicalKey == LogicalKeyboardKey.space) {
       startGame();
     } else if (event.logicalKey == LogicalKeyboardKey.escape) {
-      if (gameState == GameState.playing) {
+      if (allowPause && gameState == GameState.playing) {
         togglePause();
       }
     }
@@ -297,6 +300,7 @@ class PongGame extends FlameGame
   }
 
   void togglePause() {
+    if (!allowPause) return;
     if (_isPaused) {
       resumeEngine();
       gameState = GameState.playing;

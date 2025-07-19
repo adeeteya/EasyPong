@@ -2,6 +2,7 @@ import 'package:easy_pong/functions.dart';
 import 'package:easy_pong/widgets/tile_button.dart';
 import 'package:flame/flame.dart';
 import 'package:flutter/material.dart';
+import 'dart:io';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -36,13 +37,27 @@ class HomeScreen extends StatelessWidget {
                     await Flame.device.setPortrait();
                   },
                 ),
+                if (Platform.isAndroid) ...[
+                  const SizedBox(height: 20),
+                  TileButton(
+                    titleText: "Realtime Multiplayer",
+                    width: isPhone() ? 250 : 350,
+                    onTap: () async {
+                      await Navigator.of(
+                        context,
+                      ).pushNamed('/real_time_multiplayer');
+                      await Flame.device.setPortrait();
+                    },
+                  ),
+                ],
                 const SizedBox(height: 20),
                 TileButton(
                   titleText: "Play vs Computer",
                   width: isPhone() ? 250 : 350,
                   onTap: () async {
-                    await Navigator.of(context)
-                        .pushNamed('/computer_difficulty');
+                    await Navigator.of(
+                      context,
+                    ).pushNamed('/computer_difficulty');
                     await Flame.device.setPortrait();
                   },
                 ),
