@@ -2,96 +2,103 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flutter_nearby_connections/flutter_nearby_connections.dart';
+
 enum LanRole { host, client }
 
 class LanService {
-  LanService.host({this.port = 42124}) : role = LanRole.host;
-  LanService.client({this.port = 42124}) : role = LanRole.client;
+  LanService.host() : role = LanRole.host;
+  LanService.client() : role = LanRole.client;
 
   final LanRole role;
-  final int port;
 
-  RawDatagramSocket? _socket;
-  InternetAddress? _peerAddress;
-
+  final _nearbyService = NearbyService();
   final _controller = StreamController<Map<String, dynamic>>.broadcast();
   Stream<Map<String, dynamic>> get messages => _controller.stream;
 
-  static const discoveryPort = 42123;
-  static const discoveryMessage = 'EASY_PONG_DISCOVER';
-  static const discoveryResponse = 'EASY_PONG_FOUND';
+  StreamSubscription? _stateSub;
+  StreamSubscription? _dataSub;
+  Device? _peerDevice;
+  Completer<void>? _connectCompleter;
 
   Future<void> start() async {
-    _socket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, port);
-    _socket!.listen(_onEvent);
-    if (role == LanRole.host) {
-      _socket!.broadcastEnabled = true;
+    final deviceInfo = DeviceInfoPlugin();
+    String deviceName = 'Unknown';
+    if (Platform.isAndroid) {
+      final info = await deviceInfo.androidInfo;
+      deviceName = info.model;
+    } else if (Platform.isIOS) {
+      final info = await deviceInfo.iosInfo;
+      deviceName = info.localizedModel;
     }
-  }
 
-  void _onEvent(RawSocketEvent event) {
-    if (event == RawSocketEvent.read) {
-      final dg = _socket!.receive();
-      if (dg == null) return;
-      final msg = utf8.decode(dg.data);
-      if (role == LanRole.host && msg == discoveryMessage) {
-        _socket!.send(
-          utf8.encode(discoveryResponse),
-          dg.address,
-          discoveryPort,
-        );
-      } else {
-        _peerAddress ??= dg.address;
-        try {
-          final decoded = jsonDecode(msg) as Map<String, dynamic>;
-          _controller.add(decoded);
-        } catch (_) {
-          // ignore malformed packet
+    _connectCompleter = Completer<void>();
+    await _nearbyService.init(
+      serviceType: 'easy-pong',
+      deviceName: deviceName,
+      strategy: Strategy.P2P_CLUSTER,
+      callback: (isRunning) async {
+        if (isRunning) {
+          if (role == LanRole.host) {
+            await _nearbyService.startAdvertisingPeer();
+            await _nearbyService.startBrowsingForPeers();
+          } else {
+            await _nearbyService.startBrowsingForPeers();
+          }
         }
-      }
-    }
-  }
-
-  Future<InternetAddress?> discoverHost({
-    Duration timeout = const Duration(seconds: 3),
-  }) async {
-    final socket = await RawDatagramSocket.bind(InternetAddress.anyIPv4, 0);
-    socket.broadcastEnabled = true;
-    final completer = Completer<InternetAddress?>();
-    Timer? timer;
-    timer = Timer(timeout, () {
-      socket.close();
-      if (!completer.isCompleted) completer.complete(null);
-    });
-    socket.listen((event) {
-      if (event == RawSocketEvent.read) {
-        final dg = socket.receive();
-        if (dg == null) return;
-        final msg = utf8.decode(dg.data);
-        if (msg == discoveryResponse) {
-          timer?.cancel();
-          socket.close();
-          if (!completer.isCompleted) completer.complete(dg.address);
-        }
-      }
-    });
-    socket.send(
-      utf8.encode(discoveryMessage),
-      InternetAddress('255.255.255.255'),
-      discoveryPort,
+      },
     );
-    return completer.future;
+
+    _dataSub = _nearbyService.dataReceivedSubscription(
+      callback: (data) {
+        final msg = data['message'] as String?;
+        if (msg != null) {
+          try {
+            final decoded = jsonDecode(msg) as Map<String, dynamic>;
+            _controller.add(decoded);
+          } catch (_) {
+            // ignore malformed packet
+          }
+        }
+      },
+    );
+
+    _stateSub = _nearbyService.stateChangedSubscription(
+      callback: (devices) async {
+        for (final device in devices) {
+          if (device.state == SessionState.connected) {
+            _peerDevice = device;
+            if (!(_connectCompleter?.isCompleted ?? true)) {
+              _connectCompleter!.complete();
+            }
+          } else if (role == LanRole.client &&
+              device.state == SessionState.notConnected) {
+            await _nearbyService.invitePeer(
+              deviceID: device.deviceId,
+              deviceName: device.deviceName,
+            );
+          }
+        }
+      },
+    );
+  }
+
+  Future<void> waitForConnection() async {
+    await _connectCompleter?.future;
   }
 
   void send(Map<String, dynamic> data) {
-    if (_peerAddress != null && _socket != null) {
-      final bytes = utf8.encode(jsonEncode(data));
-      _socket!.send(bytes, _peerAddress!, port);
+    if (_peerDevice != null) {
+      _nearbyService.sendMessage(_peerDevice!.deviceId, jsonEncode(data));
     }
   }
 
   void dispose() {
-    _socket?.close();
+    _stateSub?.cancel();
+    _dataSub?.cancel();
+    _nearbyService.stopAdvertisingPeer();
+    _nearbyService.stopBrowsingForPeers();
     _controller.close();
   }
 }
