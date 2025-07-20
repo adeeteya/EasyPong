@@ -53,17 +53,17 @@ class RealTimePongGame extends PongGame {
             Vector2((data['bvx'] as num) * width, (data['bvy'] as num) * width),
           );
           findByKey<Paddle>(ComponentKey.named('LeftPaddle'))?.position.y =
-              (data['ly'] as num) * height;
+              (data['hostpaddley'] as num) * height;
           findByKey<Paddle>(ComponentKey.named('RightPaddle'))?.position.y =
-              (data['ry'] as num) * height;
+              (data['clientpaddley'] as num) * height;
           leftPlayerScore = data['ls'];
           rightPlayerScore = data['rs'];
         }
         break;
       case 'paddle':
         if (isHost) {
-          findByKey<Paddle>(ComponentKey.named('RightPaddle'))?.position.y =
-              (data['ry'] as num) * height;
+          findByKey<Paddle>(ComponentKey.named('LeftPaddle'))?.position.y =
+              (data['clientpaddley'] as num) * height;
         }
         break;
       case 'quit':
@@ -89,15 +89,15 @@ class RealTimePongGame extends PongGame {
           'by': ball.position.y / height,
           'bvx': ball.velocity.x / width,
           'bvy': ball.velocity.y / width,
-          'ly':
+          'hostpaddley':
               (findByKey<Paddle>(
-                    ComponentKey.named('LeftPaddle'),
+                    ComponentKey.named('RightPaddle'),
                   )?.position.y ??
                   0) /
               height,
-          'ry':
+          'clientpaddley':
               (findByKey<Paddle>(
-                    ComponentKey.named('RightPaddle'),
+                    ComponentKey.named('LeftPaddle'),
                   )?.position.y ??
                   0) /
               height,
@@ -111,18 +111,22 @@ class RealTimePongGame extends PongGame {
   @override
   void onDragUpdate(DragUpdateEvent event) {
     if (isHost) {
-      if (event.canvasStartPosition.x < width / 2) {
-        findByKey<Paddle>(ComponentKey.named('LeftPaddle'))?.moveBy(
-          event.localDelta.y * 2,
-        );
+      if (event.canvasStartPosition.x >= width / 2) {
+        findByKey<Paddle>(
+          ComponentKey.named('RightPaddle'),
+        )?.moveBy(event.localDelta.y * 2);
       }
     } else {
       if (event.canvasStartPosition.x >= width / 2) {
-        final paddle =
-            findByKey<Paddle>(ComponentKey.named('RightPaddle'));
+        final paddle = findByKey<Paddle>(ComponentKey.named('RightPaddle'));
         paddle?.moveBy(event.localDelta.y * 2);
-        final ry = paddle?.position.y ?? 0;
-        manager.send(jsonEncode({'type': 'paddle', 'ry': ry / height}));
+        final clientPaddleY = paddle?.position.y ?? 0;
+        manager.send(
+          jsonEncode({
+            'type': 'paddle',
+            'clientpaddley': clientPaddleY / height,
+          }),
+        );
       }
     }
   }
@@ -141,10 +145,14 @@ class RealTimePongGame extends PongGame {
     Set<LogicalKeyboardKey> keysPressed,
   ) {
     if (isHost) {
-      if (keysPressed.contains(LogicalKeyboardKey.keyW)) {
-        findByKey<Paddle>(ComponentKey.named('LeftPaddle'))?.moveBy(-paddleStep);
-      } else if (keysPressed.contains(LogicalKeyboardKey.keyS)) {
-        findByKey<Paddle>(ComponentKey.named('LeftPaddle'))?.moveBy(paddleStep);
+      if (keysPressed.contains(LogicalKeyboardKey.arrowUp)) {
+        findByKey<Paddle>(
+          ComponentKey.named('RightPaddle'),
+        )?.moveBy(-paddleStep);
+      } else if (keysPressed.contains(LogicalKeyboardKey.arrowDown)) {
+        findByKey<Paddle>(
+          ComponentKey.named('RightPaddle'),
+        )?.moveBy(paddleStep);
       } else if (event.logicalKey == LogicalKeyboardKey.enter ||
           event.logicalKey == LogicalKeyboardKey.space) {
         startGame();
@@ -156,17 +164,25 @@ class RealTimePongGame extends PongGame {
       }
     } else {
       if (keysPressed.contains(LogicalKeyboardKey.arrowUp)) {
-        final paddle =
-            findByKey<Paddle>(ComponentKey.named('RightPaddle'));
+        final paddle = findByKey<Paddle>(ComponentKey.named('RightPaddle'));
         paddle?.moveBy(-paddleStep);
-        final ry = paddle?.position.y ?? 0;
-        manager.send(jsonEncode({'type': 'paddle', 'ry': ry / height}));
+        final clientPaddleY = paddle?.position.y ?? 0;
+        manager.send(
+          jsonEncode({
+            'type': 'paddle',
+            'clientpaddley': clientPaddleY / height,
+          }),
+        );
       } else if (keysPressed.contains(LogicalKeyboardKey.arrowDown)) {
-        final paddle =
-            findByKey<Paddle>(ComponentKey.named('RightPaddle'));
+        final paddle = findByKey<Paddle>(ComponentKey.named('RightPaddle'));
         paddle?.moveBy(paddleStep);
-        final ry = paddle?.position.y ?? 0;
-        manager.send(jsonEncode({'type': 'paddle', 'ry': ry / height}));
+        final clientPaddleY = paddle?.position.y ?? 0;
+        manager.send(
+          jsonEncode({
+            'type': 'paddle',
+            'clientpaddley': clientPaddleY / height,
+          }),
+        );
       }
     }
     return KeyEventResult.handled;
