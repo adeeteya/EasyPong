@@ -1,6 +1,9 @@
 import 'dart:io';
 
+import 'package:easy_pong/components/pong_game.dart';
 import 'package:easy_pong/notifiers/settings_notifier.dart';
+import 'package:easy_pong/overlays/welcome_overlay.dart';
+import 'package:easy_pong/overlays/winner_overlay.dart';
 import 'package:easy_pong/p2p/p2p_manager.dart';
 import 'package:easy_pong/p2p/real_time_pong_game.dart';
 import 'package:flame/flame.dart';
@@ -64,7 +67,24 @@ class _RealTimeGameAppState extends ConsumerState<RealTimeGameApp> {
       child: Scaffold(
         body: GameWidget<RealTimePongGame>(
           game: _game,
-          overlayBuilderMap: const {},
+          overlayBuilderMap: {
+            GameState.welcome.name:
+                (context, PongGame game) => WelcomeOverlay(
+                  gameTheme: game.gameTheme,
+                  isVsComputer: game.vsComputer,
+                ),
+            GameState.gameOver.name:
+                (context, PongGame game) => WinnerOverlay(
+                  gameTheme: game.gameTheme,
+                  leftPlayerScore: game.leftPlayerScore,
+                  rightPlayerScore: game.rightPlayerScore,
+                  isVsComputer: game.vsComputer,
+                  gameReplayPressed: () {
+                    game.overlays.clear();
+                    game.gameState = GameState.welcome;
+                  },
+                ),
+          },
         ),
       ),
     );

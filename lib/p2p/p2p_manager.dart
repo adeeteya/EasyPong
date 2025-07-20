@@ -69,13 +69,21 @@ class P2pManager {
     Function(dynamic)? onError,
   }) async {
     if (!isHost) {
-      await _client?.startScan(result, onDone: onDone, onError: onError);
+      await _client?.startScan(
+        result,
+        onDone: onDone,
+        onError: onError,
+        timeout: const Duration(seconds: 60),
+      );
     }
   }
 
   Future<void> connectDevice(BleDiscoveredDevice device) async {
     if (!isHost) {
-      await _client?.connectWithDevice(device);
+      await _client?.connectWithDevice(
+        device,
+        timeout: const Duration(seconds: 60),
+      );
     }
   }
 
