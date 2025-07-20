@@ -25,6 +25,7 @@ class P2pManager {
   final _controller = StreamController<String>.broadcast();
   Stream<String> get messages => _controller.stream;
   void Function()? onOpponentLeft;
+  bool _hadConnectedClient = false;
 
   P2pManager.host() : isHost = true;
   P2pManager.client() : isHost = false;
@@ -38,7 +39,9 @@ class P2pManager {
       await _host!.initialize();
       _host!.streamReceivedTexts().listen(_controller.add);
       _host!.streamClientList().listen((clients) {
-        if (clients.isEmpty) {
+        if (clients.isNotEmpty) {
+          _hadConnectedClient = true;
+        } else if (_hadConnectedClient) {
           onOpponentLeft?.call();
         }
       });
