@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:easy_pong/components/components.dart';
 import 'package:easy_pong/components/pong_game.dart';
 import 'package:easy_pong/p2p/p2p_manager.dart';
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flutter/material.dart';
@@ -24,6 +25,13 @@ class RealTimePongGame extends PongGame {
   Future<void> onLoad() async {
     await super.onLoad();
     manager.messages.listen(_handleMessage);
+    if (!isHost) {
+      // Disable local ball collisions on the client.
+      final ball = world.children.query<Ball>().first;
+      for (final hitbox in ball.children.whereType<ShapeHitbox>()) {
+        hitbox.collisionType = CollisionType.inactive;
+      }
+    }
   }
 
   void _handleMessage(String message) {
@@ -102,11 +110,20 @@ class RealTimePongGame extends PongGame {
 
   @override
   void onDragUpdate(DragUpdateEvent event) {
-    super.onDragUpdate(event);
-    if (!isHost && event.canvasStartPosition.x >= width / 2) {
-      final ry =
-          findByKey<Paddle>(ComponentKey.named('RightPaddle'))?.position.y ?? 0;
-      manager.send(jsonEncode({'type': 'paddle', 'ry': ry / height}));
+    if (isHost) {
+      if (event.canvasStartPosition.x < width / 2) {
+        findByKey<Paddle>(ComponentKey.named('LeftPaddle'))?.moveBy(
+          event.localDelta.y * 2,
+        );
+      }
+    } else {
+      if (event.canvasStartPosition.x >= width / 2) {
+        final paddle =
+            findByKey<Paddle>(ComponentKey.named('RightPaddle'));
+        paddle?.moveBy(event.localDelta.y * 2);
+        final ry = paddle?.position.y ?? 0;
+        manager.send(jsonEncode({'type': 'paddle', 'ry': ry / height}));
+      }
     }
   }
 
@@ -123,36 +140,33 @@ class RealTimePongGame extends PongGame {
     KeyEvent event,
     Set<LogicalKeyboardKey> keysPressed,
   ) {
-    super.onKeyEvent(event, keysPressed);
-    if (keysPressed.contains(LogicalKeyboardKey.arrowUp)) {
-      findByKey<Paddle>(ComponentKey.named('RightPaddle'))?.moveBy(-paddleStep);
-      if (!isHost) {
-        final ry =
-            findByKey<Paddle>(ComponentKey.named('RightPaddle'))?.position.y ??
-            0;
-        manager.send(jsonEncode({'type': 'paddle', 'ry': ry / height}));
+    if (isHost) {
+      if (keysPressed.contains(LogicalKeyboardKey.keyW)) {
+        findByKey<Paddle>(ComponentKey.named('LeftPaddle'))?.moveBy(-paddleStep);
+      } else if (keysPressed.contains(LogicalKeyboardKey.keyS)) {
+        findByKey<Paddle>(ComponentKey.named('LeftPaddle'))?.moveBy(paddleStep);
+      } else if (event.logicalKey == LogicalKeyboardKey.enter ||
+          event.logicalKey == LogicalKeyboardKey.space) {
+        startGame();
+        manager.send(jsonEncode({'type': 'start'}));
+      } else if (event.logicalKey == LogicalKeyboardKey.escape) {
+        if (allowPause && gameState == GameState.playing) {
+          togglePause();
+        }
       }
-    } else if (keysPressed.contains(LogicalKeyboardKey.arrowDown)) {
-      findByKey<Paddle>(ComponentKey.named('RightPaddle'))?.moveBy(paddleStep);
-      if (!isHost) {
-        final ry =
-            findByKey<Paddle>(ComponentKey.named('RightPaddle'))?.position.y ??
-            0;
+    } else {
+      if (keysPressed.contains(LogicalKeyboardKey.arrowUp)) {
+        final paddle =
+            findByKey<Paddle>(ComponentKey.named('RightPaddle'));
+        paddle?.moveBy(-paddleStep);
+        final ry = paddle?.position.y ?? 0;
         manager.send(jsonEncode({'type': 'paddle', 'ry': ry / height}));
-      }
-    }
-    if (!vsComputer && keysPressed.contains(LogicalKeyboardKey.keyW)) {
-      findByKey<Paddle>(ComponentKey.named('LeftPaddle'))?.moveBy(-paddleStep);
-    } else if (!vsComputer && keysPressed.contains(LogicalKeyboardKey.keyS)) {
-      findByKey<Paddle>(ComponentKey.named('LeftPaddle'))?.moveBy(paddleStep);
-    } else if (isHost &&
-        (event.logicalKey == LogicalKeyboardKey.enter ||
-            event.logicalKey == LogicalKeyboardKey.space)) {
-      startGame();
-      manager.send(jsonEncode({'type': 'start'}));
-    } else if (event.logicalKey == LogicalKeyboardKey.escape) {
-      if (allowPause && gameState == GameState.playing) {
-        togglePause();
+      } else if (keysPressed.contains(LogicalKeyboardKey.arrowDown)) {
+        final paddle =
+            findByKey<Paddle>(ComponentKey.named('RightPaddle'));
+        paddle?.moveBy(paddleStep);
+        final ry = paddle?.position.y ?? 0;
+        manager.send(jsonEncode({'type': 'paddle', 'ry': ry / height}));
       }
     }
     return KeyEventResult.handled;
