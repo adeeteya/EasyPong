@@ -5,6 +5,8 @@ import 'package:easy_pong/components/pong_game.dart';
 import 'package:easy_pong/p2p/p2p_manager.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class RealTimePongGame extends PongGame {
   final P2pManager manager;
@@ -27,6 +29,11 @@ class RealTimePongGame extends PongGame {
   void _handleMessage(String message) {
     final data = jsonDecode(message) as Map<String, dynamic>;
     switch (data['type']) {
+      case 'start':
+        if (!isHost && gameState == GameState.welcome) {
+          startGame();
+        }
+        break;
       case 'state':
         if (!isHost) {
           final ball = world.children.query<Ball>().first;
@@ -92,6 +99,54 @@ class RealTimePongGame extends PongGame {
           findByKey<Paddle>(ComponentKey.named('RightPaddle'))?.position.y ?? 0;
       manager.send(jsonEncode({'type': 'paddle', 'ry': ry}));
     }
+  }
+
+  @override
+  void onTap() {
+    if (isHost && gameState == GameState.welcome) {
+      super.onTap();
+      manager.send(jsonEncode({'type': 'start'}));
+    }
+  }
+
+  @override
+  KeyEventResult onKeyEvent(
+    KeyEvent event,
+    Set<LogicalKeyboardKey> keysPressed,
+  ) {
+    super.onKeyEvent(event, keysPressed);
+    if (keysPressed.contains(LogicalKeyboardKey.arrowUp)) {
+      findByKey<Paddle>(ComponentKey.named('RightPaddle'))?.moveBy(-paddleStep);
+      if (!isHost) {
+        final ry =
+            findByKey<Paddle>(ComponentKey.named('RightPaddle'))?.position.y ??
+            0;
+        manager.send(jsonEncode({'type': 'paddle', 'ry': ry}));
+      }
+    } else if (keysPressed.contains(LogicalKeyboardKey.arrowDown)) {
+      findByKey<Paddle>(ComponentKey.named('RightPaddle'))?.moveBy(paddleStep);
+      if (!isHost) {
+        final ry =
+            findByKey<Paddle>(ComponentKey.named('RightPaddle'))?.position.y ??
+            0;
+        manager.send(jsonEncode({'type': 'paddle', 'ry': ry}));
+      }
+    }
+    if (!vsComputer && keysPressed.contains(LogicalKeyboardKey.keyW)) {
+      findByKey<Paddle>(ComponentKey.named('LeftPaddle'))?.moveBy(-paddleStep);
+    } else if (!vsComputer && keysPressed.contains(LogicalKeyboardKey.keyS)) {
+      findByKey<Paddle>(ComponentKey.named('LeftPaddle'))?.moveBy(paddleStep);
+    } else if (isHost &&
+        (event.logicalKey == LogicalKeyboardKey.enter ||
+            event.logicalKey == LogicalKeyboardKey.space)) {
+      startGame();
+      manager.send(jsonEncode({'type': 'start'}));
+    } else if (event.logicalKey == LogicalKeyboardKey.escape) {
+      if (allowPause && gameState == GameState.playing) {
+        togglePause();
+      }
+    }
+    return KeyEventResult.handled;
   }
 
   @override

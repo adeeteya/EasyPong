@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:easy_pong/components/pong_game.dart';
 import 'package:easy_pong/notifiers/settings_notifier.dart';
+import 'package:easy_pong/overlays/waiting_for_host_overlay.dart';
 import 'package:easy_pong/overlays/welcome_overlay.dart';
 import 'package:easy_pong/overlays/winner_overlay.dart';
 import 'package:easy_pong/p2p/p2p_manager.dart';
@@ -69,10 +70,13 @@ class _RealTimeGameAppState extends ConsumerState<RealTimeGameApp> {
           game: _game,
           overlayBuilderMap: {
             GameState.welcome.name:
-                (context, PongGame game) => WelcomeOverlay(
-                  gameTheme: game.gameTheme,
-                  isVsComputer: game.vsComputer,
-                ),
+                (context, PongGame game) =>
+                    widget.isHost
+                        ? WelcomeOverlay(
+                          gameTheme: game.gameTheme,
+                          isVsComputer: game.vsComputer,
+                        )
+                        : WaitingForHostOverlay(gameTheme: game.gameTheme),
             GameState.gameOver.name:
                 (context, PongGame game) => WinnerOverlay(
                   gameTheme: game.gameTheme,
