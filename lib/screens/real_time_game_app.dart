@@ -69,25 +69,22 @@ class _RealTimeGameAppState extends ConsumerState<RealTimeGameApp> {
         body: GameWidget<RealTimePongGame>(
           game: _game,
           overlayBuilderMap: {
-            GameState.welcome.name:
-                (context, PongGame game) =>
-                    widget.isHost
-                        ? WelcomeOverlay(
-                          gameTheme: game.gameTheme,
-                          isVsComputer: game.vsComputer,
-                        )
-                        : WaitingForHostOverlay(gameTheme: game.gameTheme),
-            GameState.gameOver.name:
-                (context, PongGame game) => WinnerOverlay(
-                  gameTheme: game.gameTheme,
-                  leftPlayerScore: game.leftPlayerScore,
-                  rightPlayerScore: game.rightPlayerScore,
-                  isVsComputer: game.vsComputer,
-                  gameReplayPressed: () {
-                    game.overlays.clear();
-                    game.gameState = GameState.welcome;
-                  },
-                ),
+            GameState.welcome.name: (context, PongGame game) => widget.isHost
+                ? WelcomeOverlay(
+                    gameTheme: game.gameTheme,
+                    isVsComputer: game.vsComputer,
+                  )
+                : WaitingForHostOverlay(gameTheme: game.gameTheme),
+            GameState.gameOver.name: (context, PongGame game) => WinnerOverlay(
+              gameTheme: game.gameTheme,
+              leftPlayerScore: game.leftPlayerScore,
+              rightPlayerScore: game.rightPlayerScore,
+              isVsComputer: game.vsComputer,
+              gameReplayPressed: () {
+                game.overlays.clear();
+                game.gameState = GameState.welcome;
+              },
+            ),
           },
         ),
       ),

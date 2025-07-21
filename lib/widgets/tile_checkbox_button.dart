@@ -44,19 +44,17 @@ class TileCheckboxButton extends ConsumerWidget {
               Text(
                 titleText,
                 textAlign: TextAlign.center,
-                style:
-                    (width <= 250)
-                        ? Theme.of(context).textTheme.bodySmall
-                        : Theme.of(context).textTheme.titleMedium,
+                style: (width <= 250)
+                    ? Theme.of(context).textTheme.bodySmall
+                    : Theme.of(context).textTheme.titleMedium,
               ),
               const Spacer(),
               Text(
                 isChecked ? "<on>" : "<off>",
                 textAlign: TextAlign.center,
-                style:
-                    (width <= 250)
-                        ? Theme.of(context).textTheme.bodySmall
-                        : Theme.of(context).textTheme.titleMedium,
+                style: (width <= 250)
+                    ? Theme.of(context).textTheme.bodySmall
+                    : Theme.of(context).textTheme.titleMedium,
               ).animate(key: ValueKey(isChecked)).fade(duration: 300.ms),
               const SizedBox(width: 8),
             ],

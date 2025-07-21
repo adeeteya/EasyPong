@@ -35,9 +35,8 @@ class SettingsScreen extends ConsumerWidget {
                   titleText: "Theme",
                   valueText: settingsModel.gameThemeName.toLowerCase(),
                   width: isPhone() ? 250 : 350,
-                  onTap:
-                      () =>
-                          ref.read(settingsProvider.notifier).switchGameTheme(),
+                  onTap: () =>
+                      ref.read(settingsProvider.notifier).switchGameTheme(),
                 ),
                 const SizedBox(height: 20),
                 TileCheckboxButton(

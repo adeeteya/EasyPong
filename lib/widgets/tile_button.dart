@@ -41,14 +41,13 @@ class TileButton extends ConsumerWidget {
             child: Text(
               titleText,
               textAlign: TextAlign.center,
-              style:
-                  (width <= 250)
-                      ? Theme.of(
-                        context,
-                      ).textTheme.bodySmall?.copyWith(color: borderColor)
-                      : Theme.of(
-                        context,
-                      ).textTheme.titleMedium?.copyWith(color: borderColor),
+              style: (width <= 250)
+                  ? Theme.of(
+                      context,
+                    ).textTheme.bodySmall?.copyWith(color: borderColor)
+                  : Theme.of(
+                      context,
+                    ).textTheme.titleMedium?.copyWith(color: borderColor),
             ),
           ),
         ),

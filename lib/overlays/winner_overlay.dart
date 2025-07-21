@@ -41,11 +41,11 @@ class WinnerOverlay extends StatelessWidget {
                   Text(
                     isVsComputer
                         ? (leftPlayerScore >= rightPlayerScore
-                            ? "Computer\nWins"
-                            : "Computer\nLoses")
+                              ? "Computer\nWins"
+                              : "Computer\nLoses")
                         : (leftPlayerScore >= rightPlayerScore
-                            ? "You\nWin"
-                            : "You\nLose"),
+                              ? "You\nWin"
+                              : "You\nLose"),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: gameTheme.leftHudTextColor,
@@ -92,11 +92,11 @@ class WinnerOverlay extends StatelessWidget {
                   Text(
                     isVsComputer
                         ? (rightPlayerScore > leftPlayerScore
-                            ? "You\nWin"
-                            : "You\nLose")
+                              ? "You\nWin"
+                              : "You\nLose")
                         : (rightPlayerScore > leftPlayerScore
-                            ? "You\nWin"
-                            : "You\nLose"),
+                              ? "You\nWin"
+                              : "You\nLose"),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: gameTheme.rightHudTextColor,

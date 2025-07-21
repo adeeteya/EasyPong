@@ -51,8 +51,8 @@ class _RealTimeConnectionScreenState extends State<RealTimeConnectionScreen> {
       if (clients.isNotEmpty && mounted) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder:
-                (context) => RealTimeGameApp(manager: manager!, isHost: true),
+            builder: (context) =>
+                RealTimeGameApp(manager: manager!, isHost: true),
           ),
         );
       }
@@ -81,8 +81,8 @@ class _RealTimeConnectionScreenState extends State<RealTimeConnectionScreen> {
       unawaited(
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
-            builder:
-                (context) => RealTimeGameApp(manager: manager!, isHost: false),
+            builder: (context) =>
+                RealTimeGameApp(manager: manager!, isHost: false),
           ),
         ),
       );

@@ -56,21 +56,20 @@ class _GameAppState extends ConsumerState<GameApp> {
       _game.pauseEngine();
       final quit = await showDialog<bool>(
         context: context,
-        builder:
-            (context) => AlertDialog(
-              title: const Text('Quit Game?'),
-              content: const Text('Do you want to quit the current game?'),
-              actions: [
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(false),
-                  child: const Text('No'),
-                ),
-                TextButton(
-                  onPressed: () => Navigator.of(context).pop(true),
-                  child: const Text('Yes'),
-                ),
-              ],
+        builder: (context) => AlertDialog(
+          title: const Text('Quit Game?'),
+          content: const Text('Do you want to quit the current game?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(false),
+              child: const Text('No'),
             ),
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(true),
+              child: const Text('Yes'),
+            ),
+          ],
+        ),
       );
       if (quit != true) {
         _game.resumeEngine();
@@ -101,13 +100,13 @@ class _GameAppState extends ConsumerState<GameApp> {
             return GameWidget(
               game: _game,
               overlayBuilderMap: {
-                GameState.welcome.name:
-                    (context, PongGame game) => WelcomeOverlay(
+                GameState.welcome.name: (context, PongGame game) =>
+                    WelcomeOverlay(
                       gameTheme: game.gameTheme,
                       isVsComputer: game.vsComputer,
                     ),
-                GameState.gameOver.name:
-                    (context, PongGame game) => WinnerOverlay(
+                GameState.gameOver.name: (context, PongGame game) =>
+                    WinnerOverlay(
                       gameTheme: game.gameTheme,
                       leftPlayerScore: game.leftPlayerScore,
                       rightPlayerScore: game.rightPlayerScore,
@@ -117,8 +116,8 @@ class _GameAppState extends ConsumerState<GameApp> {
                         game.gameState = GameState.welcome;
                       },
                     ),
-                GameState.paused.name:
-                    (context, PongGame game) => PauseMenuOverlay(game: game),
+                GameState.paused.name: (context, PongGame game) =>
+                    PauseMenuOverlay(game: game),
               },
             );
           },

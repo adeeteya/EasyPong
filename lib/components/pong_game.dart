@@ -84,13 +84,12 @@ class PongGame extends FlameGame
       height: height,
     );
     camera.viewfinder.anchor = Anchor.topLeft;
-    camera.backdrop =
-        (gameTheme.backgroundImageAssetPath != null)
-            ? ImageAssetBackground(gameTheme.backgroundImageAssetPath!)
-            : CenterLineDivider(
-              isDividerContinuous: gameTheme.isDividerContinuous,
-              dividerColor: gameTheme.dividerColor,
-            );
+    camera.backdrop = (gameTheme.backgroundImageAssetPath != null)
+        ? ImageAssetBackground(gameTheme.backgroundImageAssetPath!)
+        : CenterLineDivider(
+            isDividerContinuous: gameTheme.isDividerContinuous,
+            dividerColor: gameTheme.dividerColor,
+          );
     paddleSize = Vector2(width * 0.02, height * 0.2);
     paddleStep = height * 0.05;
     gameState = GameState.welcome;
@@ -225,14 +224,14 @@ class PongGame extends FlameGame
             aiPaddle.position.y = desiredY.clamp(0, height - aiPaddle.size.y);
             break;
           case ComputerDifficulty.medium:
-            aiPaddle.position.y = (aiPaddle.position.y +
-                    (desiredY - aiPaddle.position.y) * 0.1)
-                .clamp(0, height - aiPaddle.size.y);
+            aiPaddle.position.y =
+                (aiPaddle.position.y + (desiredY - aiPaddle.position.y) * 0.1)
+                    .clamp(0, height - aiPaddle.size.y);
             break;
           case ComputerDifficulty.easy:
-            aiPaddle.position.y = (aiPaddle.position.y +
-                    (desiredY - aiPaddle.position.y) * 0.05)
-                .clamp(0, height - aiPaddle.size.y);
+            aiPaddle.position.y =
+                (aiPaddle.position.y + (desiredY - aiPaddle.position.y) * 0.05)
+                    .clamp(0, height - aiPaddle.size.y);
             break;
         }
       }
@@ -262,22 +261,19 @@ class PongGame extends FlameGame
   Vector2 randomBallVelocity({bool? startsWithRightPlayer}) {
     if (startsWithRightPlayer == null) {
       return Vector2(
-          (rand.nextDouble() - 0.5) * width,
-          (rand.nextDouble() * 0.4 - 0.2) * height,
-        ).normalized()
-        ..scale(width / 1.5);
+        (rand.nextDouble() - 0.5) * width,
+        (rand.nextDouble() * 0.4 - 0.2) * height,
+      ).normalized()..scale(width / 1.5);
     } else if (startsWithRightPlayer) {
       return Vector2(
-          (rand.nextDouble() * 0.35 + 0.15) * width,
-          (rand.nextDouble() * 0.4 - 0.2) * height,
-        ).normalized()
-        ..scale(width / 1.5);
+        (rand.nextDouble() * 0.35 + 0.15) * width,
+        (rand.nextDouble() * 0.4 - 0.2) * height,
+      ).normalized()..scale(width / 1.5);
     } else {
       return Vector2(
-          (rand.nextDouble() * 0.35 - 0.5) * width,
-          (rand.nextDouble() * 0.4 - 0.2) * height,
-        ).normalized()
-        ..scale(width / 1.5);
+        (rand.nextDouble() * 0.35 - 0.5) * width,
+        (rand.nextDouble() * 0.4 - 0.2) * height,
+      ).normalized()..scale(width / 1.5);
     }
   }
 
