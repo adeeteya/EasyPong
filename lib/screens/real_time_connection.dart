@@ -92,8 +92,9 @@ class _RealTimeConnectionScreenState extends State<RealTimeConnectionScreen> {
   @override
   Widget build(BuildContext context) {
     if (hosting) {
-      return const Scaffold(
-        body: Center(child: Text('Waiting for opponent...')),
+      return Scaffold(
+        appBar: AppBar(title: const Text("Hosting Game")),
+        body: const Center(child: Text('Waiting for opponent...')),
       );
     }
     if (joining) {
