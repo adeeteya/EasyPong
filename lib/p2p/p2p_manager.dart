@@ -26,6 +26,7 @@ class P2pManager {
   Stream<String> get messages => _controller.stream;
   void Function()? onOpponentLeft;
   bool _hadConnectedClient = false;
+  P2pClientInfo? _opponent;
 
   P2pManager.host() : isHost = true;
   P2pManager.client() : isHost = false;
@@ -41,7 +42,9 @@ class P2pManager {
       _host!.streamClientList().listen((clients) {
         if (clients.isNotEmpty) {
           _hadConnectedClient = true;
+          _opponent = clients.first;
         } else if (_hadConnectedClient) {
+          _opponent = null;
           onOpponentLeft?.call();
         }
       });
@@ -49,8 +52,21 @@ class P2pManager {
       _client = FlutterP2pClient();
       await _client!.initialize();
       _client!.streamReceivedTexts().listen(_controller.add);
+      _client!.streamClientList().listen((clients) {
+        P2pClientInfo? host;
+        for (final info in clients) {
+          if (info.isHost) {
+            host = info;
+            break;
+          }
+        }
+        if (host != null) {
+          _opponent = host;
+        }
+      });
       _client!.streamHotspotState().listen((state) {
         if (!state.isActive) {
+          _opponent = null;
           onOpponentLeft?.call();
         }
       });
@@ -88,10 +104,12 @@ class P2pManager {
   }
 
   Future<void> send(String text) async {
+    final target = _opponent;
+    if (target == null) return;
     if (isHost) {
-      await _host?.broadcastText(text);
+      await _host?.sendTextToClient(text, target.id);
     } else {
-      await _client?.broadcastText(text);
+      await _client?.sendTextToClient(text, target.id);
     }
   }
 
