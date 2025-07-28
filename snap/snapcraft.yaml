@@ -1,7 +1,7 @@
 name: easy-pong
 version: 1.0.0
 summary: A Pong Game
-description: Over Engineered Pong Game Made Using Flutter and Flame Game Engine.
+description: Classic Pong fun reimagined with local multiplayer and modern themes.
 icon: snap/gui/easy-pong.png
 contact: mailto:adeeteya@gmail.com
 source-code: https://github.com/adeeteya/EasyPong

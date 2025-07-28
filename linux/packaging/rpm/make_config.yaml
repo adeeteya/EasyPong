@@ -1,5 +1,5 @@
 icon: snap/gui/easy-pong.png
-summary: An Over Engineered Pong Game
+summary: Classic Pong fun reimagined with local multiplayer and modern themes.
 group: Applications/Utility
 vendor: adeeteya
 packager: Aditya R
@@ -15,6 +15,6 @@ keywords:
 
 generic_name: Easy Pong
 categories:
-  - Games
+  - Game
 
 startup_notify: true

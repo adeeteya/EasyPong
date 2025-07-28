@@ -3,7 +3,7 @@
     <id>com.adeeteya.easy_pong</id>
     <name>Easy Pong</name>
     <summary>
-        An Over Engineered Pong Game
+        Classic Pong fun reimagined with local multiplayer and modern themes.
     </summary>
     <metadata_license>CC0-1.0</metadata_license>
     <project_license>MIT</project_license>
@@ -16,7 +16,30 @@
     <url type="homepage">https://github.com/adeeteya/EasyPong</url>
     <url type="donation">https://buymeacoffee.com/adeeteya</url>
     <description>
-        An Over Engineered Pong Game.
+        Relive the excitement of the original arcade phenomenon with a modern twist! Easy Pong brings you fast-paced paddle action that’s perfect for a quick challenge with friends—or taking on the computer in a battle of reflexes.
+
+        Features:
+
+        Local Multiplayer – Grab a partner and face off in classic 1‑v‑1 Pong matches.
+
+        Battle the Computer – Test your skills against the AI with three difficulty levels: Easy, Medium, and Impossible.
+
+        Multiple Themes – Choose from a variety of looks, including classic retro, modern neon, football field, matrix style, brown or yellow backgrounds, or even an inverted color scheme.
+
+        Keyboard and Joystick Support – Whether you prefer a keyboard, touchscreen, or game controller, Easy Pong has you covered.
+
+        Retro Sound Effects – Enjoy built-in sounds that capture the feel of vintage arcade machines.
+
+        Cross‑Platform – Easy Pong is made with Flutter and Flame, giving you a consistent experience across Android, iOS, Windows, Linux, macOS, and web browsers.
+
+        Coming Soon:
+        Real-time online multiplayer! Challenge friends anywhere in the world.
+
+        No Personal Data Required
+        Easy Pong does not collect any personal information or location data, so you can dive into the fun instantly.
+
+        Ready to Play?
+        Download Easy Pong now and start serving up the nostalgia—perfect for quick matches, friendly competitions, or mastering your reflexes on the go!
     </description>
     <screenshots>
         <screenshot type="default">

@@ -1,11 +1,11 @@
 name: easy_pong
-description: "Over Engineered Pong Game Made Using Flutter and Flame Game Engine."
+description: "Classic Pong fun reimagined with local multiplayer and modern themes."
 publish_to: 'none'
 
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.7.0
+  sdk: ^3.8.1
   flutter: 3.32.6
 
 dependencies:

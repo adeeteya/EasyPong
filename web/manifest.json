@@ -5,7 +5,7 @@
     "display": "fullscreen",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "Over Engineered Pong Game Made Using Flutter and Flame.",
+    "description": "Classic Pong fun reimagined with local multiplayer and modern themes.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
