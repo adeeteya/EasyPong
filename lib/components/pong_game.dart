@@ -231,7 +231,7 @@ class PongGame extends FlameGame
             break;
           case ComputerDifficulty.easy:
             final diff = desiredY - aiPaddle.position.y;
-            final step = diff.clamp(-height * 0.4 * dt, height * 0.4 * dt);
+            final step = diff.clamp(-height * 0.3 * dt, height * 0.3 * dt);
             aiPaddle.position.y = (aiPaddle.position.y + step).clamp(
               0,
               height - aiPaddle.size.y,
