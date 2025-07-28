@@ -86,6 +86,7 @@ jobs:
         run: |
           sudo apt-get update -y && sudo apt-get upgrade -y
           sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev libstdc++-12-dev
+          sudo apt-get install -y libgstreamer1.0-dev libgstreamer-plugins-base1.0-dev
 
       - name: Install Flutter Dependencies
         run: flutter pub get
@@ -146,7 +147,7 @@ jobs:
       - name: Upload Windows Release Artifact to GitHub Release
         shell: cmd
         run: |
-          gh release upload ${{ inputs.version_number }} "%GITHUB_WORKSPACE%\TodoList-Windows.exe"
+          gh release upload ${{ inputs.version_number }} "%GITHUB_WORKSPACE%\EasyPong-Windows.exe"
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
 
@@ -192,15 +193,6 @@ jobs:
         env:
           ANDROID_KEY_STORE_PASSWORD: ${{ secrets.ANDROID_KEY_STORE_PASSWORD }}
 
-      - name: Release To Play Store
-        uses: maierj/fastlane-action@v3.1.0
-        with:
-          lane: 'release_play_store'
-          subdirectory: android
-          options: '{ "version_number": "${{ inputs.version_number }}" }'
-        env:
-          APP_PACKAGE_NAME: ${{ secrets.APP_PACKAGE_NAME }}
-
       - name: Build APK
         uses: maierj/fastlane-action@v3.1.0
         with:
@@ -209,6 +201,15 @@ jobs:
           options: '{ "version_number": "${{ inputs.version_number }}" }'
 
       - name: Upload APK Artifact to GitHub Release
-        run:  gh release upload ${{ inputs.version_number }} build/app/outputs/flutter-apk/EasyPong-Android.apk
+        run: gh release upload ${{ inputs.version_number }} build/app/outputs/flutter-apk/EasyPong-Android.apk
         env:
           GH_TOKEN: ${{ secrets.GH_TOKEN }}
+
+      - name: Release To Play Store
+        uses: maierj/fastlane-action@v3.1.0
+        with:
+          lane: 'release_play_store'
+          subdirectory: android
+          options: '{ "version_number": "${{ inputs.version_number }}" }'
+        env:
+          APP_PACKAGE_NAME: ${{ secrets.APP_PACKAGE_NAME }}
