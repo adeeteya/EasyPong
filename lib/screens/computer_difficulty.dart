@@ -51,8 +51,8 @@ class ComputerDifficultyScreen extends StatelessWidget {
                 TileButton(
                   titleText: 'Impossible',
                   width: isPhone() ? 250 : 350,
-                  onTap:
-                      () => _startGame(context, ComputerDifficulty.impossible),
+                  onTap: () =>
+                      _startGame(context, ComputerDifficulty.impossible),
                 ),
                 const Spacer(flex: 3),
               ],

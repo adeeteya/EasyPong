@@ -11,14 +11,15 @@ class TileCheckboxButton extends ConsumerWidget {
   final double width;
   final double height;
   final Color? tileBackgroundColor;
-  const TileCheckboxButton(
-      {super.key,
-      required this.titleText,
-      required this.onTap,
-      this.width = 350,
-      this.height = 60,
-      this.tileBackgroundColor,
-      this.isChecked = false});
+  const TileCheckboxButton({
+    super.key,
+    required this.titleText,
+    required this.onTap,
+    this.width = 350,
+    this.height = 60,
+    this.tileBackgroundColor,
+    this.isChecked = false,
+  });
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {

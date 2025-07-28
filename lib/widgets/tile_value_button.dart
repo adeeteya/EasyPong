@@ -50,12 +50,12 @@ class TileValueButton extends ConsumerWidget {
               ),
               const Spacer(),
               Text(
-                valueText,
-                textAlign: TextAlign.center,
-                style: (width <= 250)
-                    ? Theme.of(context).textTheme.bodySmall
-                    : Theme.of(context).textTheme.titleMedium,
-              )
+                    valueText,
+                    textAlign: TextAlign.center,
+                    style: (width <= 250)
+                        ? Theme.of(context).textTheme.bodySmall
+                        : Theme.of(context).textTheme.titleMedium,
+                  )
                   .animate(key: ValueKey(valueText))
                   .fade(duration: 300.ms)
                   .slideX(duration: 300.ms, begin: -0.5, end: 0),

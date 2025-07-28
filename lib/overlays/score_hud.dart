@@ -10,13 +10,15 @@ class ScoreHud extends PositionComponent with HasGameReference<PongGame> {
     required this.leftHudTextColor,
     required this.rightHudTextColor,
     required this.fontFamily,
+    this.showPauseButton = true,
   }) : super();
   final Color leftHudTextColor;
   final Color rightHudTextColor;
   final String fontFamily;
+  final bool showPauseButton;
   late final TextComponent _leftPlayerTextComponent;
   late final TextComponent _rightPlayerTextComponent;
-  late final HudButtonComponent _pauseButton;
+  HudButtonComponent? _pauseButton;
 
   @override
   FutureOr<void> onLoad() {
@@ -45,19 +47,21 @@ class ScoreHud extends PositionComponent with HasGameReference<PongGame> {
         ),
       ),
     );
-    _pauseButton = HudButtonComponent(
-      anchor: Anchor.topCenter,
-      position: Vector2(game.width / 2, 10),
-      size: Vector2.all(40),
-      button: _buildPauseButton(game.gameTheme.ballColor,
-          game.gameTheme.backgroundColor),
-      onPressed: game.togglePause,
-    );
-    addAll([
-      _leftPlayerTextComponent,
-      _rightPlayerTextComponent,
-      _pauseButton,
-    ]);
+    if (showPauseButton) {
+      _pauseButton = HudButtonComponent(
+        anchor: Anchor.topCenter,
+        position: Vector2(game.width / 2, 10),
+        size: Vector2.all(40),
+        button: _buildPauseButton(
+          game.gameTheme.ballColor,
+          game.gameTheme.backgroundColor,
+        ),
+        onPressed: game.togglePause,
+      );
+    }
+    add(_leftPlayerTextComponent);
+    add(_rightPlayerTextComponent);
+    if (_pauseButton != null) add(_pauseButton!);
   }
 
   @override

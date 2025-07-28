@@ -18,13 +18,13 @@ If you like what you see, please ⭐ the repo.
 ## ✨ Features
 
 - 🧑‍🤝‍🧑 Ability to play Local Multiplayer (1v1)
+- 🌍 Real Time Multiplayer (Android) with automatic permission requests
 - 🎮 Play Against The Computer
 - 🕹️ Supported By The Keyboard as well as the Joystick
 - 🎨 Ability To Select From Multiple Different Themes (eq:- classic, football, matrix)
 - 🔉 Built In Sound Effects
 
 ### 🔜 Upcoming Features
- - 🌍 Play Realtime Online Multiplayer Against a Friend
 
 ## 💻 Installation links
 

@@ -5,7 +5,7 @@ publish_to: 'none'
 version: 1.0.0+1
 
 environment:
-  sdk: ^3.7.0
+  sdk: ^3.8.1
   flutter: 3.32.6
 
 dependencies:
@@ -14,6 +14,7 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_animate: ^4.5.2
+  flutter_p2p_connection: ^3.0.2
   flutter_riverpod: ^2.6.1
   shared_preferences: ^2.5.3
   window_manager: ^0.5.1

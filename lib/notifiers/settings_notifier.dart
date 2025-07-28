@@ -2,8 +2,9 @@ import 'package:easy_pong/models/settings_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-final sharedPreferencesProvider =
-    Provider<SharedPreferences>((ref) => throw UnimplementedError());
+final sharedPreferencesProvider = Provider<SharedPreferences>(
+  (ref) => throw UnimplementedError(),
+);
 
 final settingsProvider = NotifierProvider<SettingsNotifier, SettingsModel>(() {
   return SettingsNotifier();
@@ -16,7 +17,7 @@ class SettingsNotifier extends Notifier<SettingsModel> {
         ref.read(sharedPreferencesProvider).getBool("isSfxEnabled") ?? true;
     final gameThemeString =
         ref.read(sharedPreferencesProvider).getString("gameTheme") ??
-            GameThemeNames.classic.name;
+        GameThemeNames.classic.name;
     return SettingsModel(gameThemeString, isSfxEnabled);
   }
 
