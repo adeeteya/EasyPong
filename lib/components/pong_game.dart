@@ -222,14 +222,20 @@ class PongGame extends FlameGame
             aiPaddle.position.y = desiredY.clamp(0, height - aiPaddle.size.y);
             break;
           case ComputerDifficulty.medium:
-            aiPaddle.position.y = (aiPaddle.position.y +
-                    (desiredY - aiPaddle.position.y) * 0.1)
-                .clamp(0, height - aiPaddle.size.y);
+            final diff = desiredY - aiPaddle.position.y;
+            final step = diff.clamp(-height * 0.5 * dt, height * 0.5 * dt);
+            aiPaddle.position.y = (aiPaddle.position.y + step).clamp(
+              0,
+              height - aiPaddle.size.y,
+            );
             break;
           case ComputerDifficulty.easy:
-            aiPaddle.position.y = (aiPaddle.position.y +
-                    (desiredY - aiPaddle.position.y) * 0.05)
-                .clamp(0, height - aiPaddle.size.y);
+            final diff = desiredY - aiPaddle.position.y;
+            final step = diff.clamp(-height * 0.3 * dt, height * 0.3 * dt);
+            aiPaddle.position.y = (aiPaddle.position.y + step).clamp(
+              0,
+              height - aiPaddle.size.y,
+            );
             break;
         }
       }
